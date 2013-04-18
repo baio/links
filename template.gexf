@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gexf xmlns="http://www.gexf.net/1.2draft" version="1.2">
+    <meta lastmodifieddate="2009-03-20">
+        <creator>Gexf.net</creator>
+        <description>Links file</description>
+    </meta>
+    <graph mode="static" defaultedgetype="undirected">
+        <nodes>
+        </nodes>
+        <edges>
+        </edges>
+    </graph>
+</gexf>

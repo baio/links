@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gexf xmlns="http://www.gexf.net/1.2draft" version="1.2" xmlns:viz="http://www.gexf.net/1.2draft/viz" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gexf.net/1.2draft http://www.gexf.net/1.2draft/gexf.xsd">
+  <meta lastmodifieddate="2013-04-19">
+    <creator>Gephi 0.8</creator>
+    <description></description>
+  </meta>
+  <graph defaultedgetype="undirected" timeformat="double" mode="dynamic">
+    <attributes class="node" mode="static">
+      <attribute id="Type" title="Type" type="string"></attribute>
+      <attribute id="degree" title="Degree" type="integer">
+        <default>0</default>
+      </attribute>
+      <attribute id="componentnumber" title="Component ID" type="integer">
+        <default>0</default>
+      </attribute>
+    </attributes>
+    <nodes>
+      <node id="ирина_сакаева" label="ирина сакаева">
+        <attvalues>
+          <attvalue for="Type" value="woman"></attvalue>
+          <attvalue for="degree" value="3"></attvalue>
+          <attvalue for="componentnumber" value="0"></attvalue>
+        </attvalues>
+        <viz:size value="11.266248"></viz:size>
+        <viz:position x="-14.047156" y="563.68494" z="0.0"></viz:position>
+        <viz:color r="162" g="64" b="64"></viz:color>
+      </node>
+      <node id="марат_сакаев" label="марат сакаев">
+        <attvalues>
+          <attvalue for="Type" value="man"></attvalue>
+          <attvalue for="degree" value="3"></attvalue>
+          <attvalue for="componentnumber" value="0"></attvalue>
+        </attvalues>
+        <viz:size value="11.266248"></viz:size>
+        <viz:position x="-852.238" y="594.7252" z="0.0"></viz:position>
+        <viz:color r="162" g="64" b="64"></viz:color>
+      </node>
+      <node id="виктор_харитонин" label="виктор харитонин">
+        <attvalues>
+          <attvalue for="Type" value="man"></attvalue>
+          <attvalue for="degree" value="2"></attvalue>
+          <attvalue for="componentnumber" value="0"></attvalue>
+        </attvalues>
+        <viz:size value="10.229627"></viz:size>
+        <viz:position x="-840.2278" y="167.22693" z="0.0"></viz:position>
+        <viz:color r="64" g="64" b="162"></viz:color>
+      </node>
+      <node id="владимир_путин" label="владимир путин">
+        <attvalues>
+          <attvalue for="Type" value="man"></attvalue>
+          <attvalue for="degree" value="1"></attvalue>
+          <attvalue for="componentnumber" value="0"></attvalue>
+        </attvalues>
+        <viz:size value="10.0"></viz:size>
+        <viz:position x="449.5714" y="-465.68726" z="0.0"></viz:position>
+        <viz:color r="162" g="162" b="64"></viz:color>
+      </node>
+      <node id="андрей_реус" label="андрей реус">
+        <attvalues>
+          <attvalue for="Type" value="man"></attvalue>
+          <attvalue for="degree" value="4"></attvalue>
+          <attvalue for="componentnumber" value="0"></attvalue>
+        </attvalues>
+        <viz:size value="20.0"></viz:size>
+        <viz:position x="-959.1593" y="-233.05367" z="0.0"></viz:position>
+        <viz:color r="64" g="162" b="64"></viz:color>
+      </node>
+      <node id="лев_григорьев" label="лев григорьев">
+        <attvalues>
+          <attvalue for="Type" value="man"></attvalue>
+          <attvalue for="degree" value="7"></attvalue>
+          <attvalue for="componentnumber" value="0"></attvalue>
+        </attvalues>
+        <viz:size value="30.0"></viz:size>
+        <viz:position x="-300.8103" y="380.15607" z="0.0"></viz:position>
+        <viz:color r="64" g="162" b="162"></viz:color>
+      </node>
+      <node id="александр_миронов" label="александр миронов">
+        <attvalues>
+          <attvalue for="Type" value="man"></attvalue>
+          <attvalue for="degree" value="2"></attvalue>
+          <attvalue for="componentnumber" value="0"></attvalue>
+        </attvalues>
+        <viz:size value="10.229627"></viz:size>
+        <viz:position x="551.42236" y="380.52722" z="0.0"></viz:position>
+        <viz:color r="64" g="64" b="162"></viz:color>
+      </node>
+      <node id="алексей_богданчиков" label="алексей богданчиков">
+        <attvalues>
+          <attvalue for="Type" value="man"></attvalue>
+          <attvalue for="degree" value="2"></attvalue>
+          <attvalue for="componentnumber" value="0"></attvalue>
+        </attvalues>
+        <viz:size value="10.229627"></viz:size>
+        <viz:position x="829.5706" y="-375.22122" z="0.0"></viz:position>
+        <viz:color r="64" g="64" b="162"></viz:color>
+      </node>
+      <node id="геннадий_тимченко" label="геннадий тимченко">
+        <attvalues>
+          <attvalue for="Type" value="man"></attvalue>
+          <attvalue for="degree" value="2"></attvalue>
+          <attvalue for="componentnumber" value="0"></attvalue>
+        </attvalues>
+        <viz:size value="10.229627"></viz:size>
+        <viz:position x="572.8584" y="-581.37915" z="0.0"></viz:position>
+        <viz:color r="64" g="64" b="162"></viz:color>
+      </node>
+      <node id="юлия_богданчикова" label="юлия богданчикова">
+        <attvalues>
+          <attvalue for="Type" value="man"></attvalue>
+          <attvalue for="degree" value="2"></attvalue>
+          <attvalue for="componentnumber" value="0"></attvalue>
+        </attvalues>
+        <viz:size value="10.229627"></viz:size>
+        <viz:position x="827.92773" y="-86.23343" z="0.0"></viz:position>
+        <viz:color r="64" g="64" b="162"></viz:color>
+      </node>
+      <node id="юлия_христенко" label="юлия христенко">
+        <attvalues>
+          <attvalue for="Type" value="man"></attvalue>
+          <attvalue for="degree" value="3"></attvalue>
+          <attvalue for="componentnumber" value="0"></attvalue>
+        </attvalues>
+        <viz:size value="11.266248"></viz:size>
+        <viz:position x="469.42978" y="-131.24393" z="0.0"></viz:position>
+        <viz:color r="162" g="64" b="64"></viz:color>
+      </node>
+      <node id="елена_скрынник" label="елена скрынник">
+        <attvalues>
+          <attvalue for="Type" value="man"></attvalue>
+          <attvalue for="degree" value="2"></attvalue>
+          <attvalue for="componentnumber" value="0"></attvalue>
+        </attvalues>
+        <viz:size value="10.229627"></viz:size>
+        <viz:position x="92.17014" y="-688.398" z="0.0"></viz:position>
+        <viz:color r="64" g="64" b="162"></viz:color>
+      </node>
+      <node id="виктор_христенко" label="виктор христенко">
+        <attvalues>
+          <attvalue for="Type" value="man"></attvalue>
+          <attvalue for="degree" value="5"></attvalue>
+          <attvalue for="componentnumber" value="0"></attvalue>
+        </attvalues>
+        <viz:size value="28.733753"></viz:size>
+        <viz:position x="128.94618" y="-387.3771" z="0.0"></viz:position>
+        <viz:color r="162" g="64" b="162"></viz:color>
+      </node>
+      <node id="татьяна_голикова" label="татьяна голикова">
+        <attvalues>
+          <attvalue for="Type" value="woman"></attvalue>
+          <attvalue for="degree" value="7"></attvalue>
+          <attvalue for="componentnumber" value="0"></attvalue>
+        </attvalues>
+        <viz:size value="30.0"></viz:size>
+        <viz:position x="175.67728" y="131.60167" z="0.0"></viz:position>
+        <viz:color r="64" g="162" b="162"></viz:color>
+      </node>
+      <node id="виктор_чемезов" label="виктор чемезов">
+        <attvalues>
+          <attvalue for="Type" value="man"></attvalue>
+          <attvalue for="degree" value="5"></attvalue>
+          <attvalue for="componentnumber" value="0"></attvalue>
+        </attvalues>
+        <viz:size value="28.733753"></viz:size>
+        <viz:position x="-728.1463" y="-628.9061" z="0.0"></viz:position>
+        <viz:color r="162" g="64" b="162"></viz:color>
+      </node>
+    </nodes>
+    <edges>
+      <edge source="ирина_сакаева" target="лев_григорьев" label="друг
+;служба
+">
+        <attvalues>
+          <attvalue for="weight" value="1.0"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="ирина_сакаева" target="марат_сакаев" label="служба,муж
+;служба
+">
+        <attvalues>
+          <attvalue for="weight" value="1.0"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="марат_сакаев" target="виктор_харитонин" label="лобби
+;служба
+">
+        <attvalues>
+          <attvalue for="weight" value="1.0"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="виктор_харитонин" target="лев_григорьев" label="двоюрод
+;служба
+">
+        <attvalues>
+          <attvalue for="weight" value="1.0"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="андрей_реус" target="лев_григорьев" label="лобби
+;служба
+">
+        <attvalues>
+          <attvalue for="weight" value="1.0"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="лев_григорьев" target="марат_сакаев" label="лобби
+;служба
+">
+        <attvalues>
+          <attvalue for="weight" value="1.0"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="александр_миронов" target="лев_григорьев" label="служба
+;служба
+">
+        <attvalues>
+          <attvalue for="weight" value="1.0"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="алексей_богданчиков" target="геннадий_тимченко" label="друг,партнер
+;служба
+">
+        <attvalues>
+          <attvalue for="weight" value="1.0"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="геннадий_тимченко" target="владимир_путин" label="друг,кореш
+;служба
+">
+        <attvalues>
+          <attvalue for="weight" value="1.0"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="юлия_богданчикова" target="алексей_богданчиков" label="муж
+;служба
+">
+        <attvalues>
+          <attvalue for="weight" value="1.0"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="юлия_богданчикова" target="юлия_христенко" label="замужество
+;служба
+">
+        <attvalues>
+          <attvalue for="weight" value="1.0"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="юлия_христенко" target="татьяна_голикова" label="сын
+;служба
+">
+        <attvalues>
+          <attvalue for="weight" value="1.0"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="юлия_христенко" target="виктор_христенко" label="сын
+;служба
+">
+        <attvalues>
+          <attvalue for="weight" value="1.0"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="елена_скрынник" target="виктор_чемезов" label="служба
+;http://goo.gl/ohEX4
+">
+        <attvalues>
+          <attvalue for="weight" value="1.0"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="елена_скрынник" target="виктор_христенко" label="брат,служба;http://goo.gl/ohEX4
+">
+        <attvalues>
+          <attvalue for="weight" value="1.0"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="виктор_христенко" target="татьяна_голикова" label="жена,служба
+;http://goo.gl/ohEX4
+">
+        <attvalues>
+          <attvalue for="weight" value="1.0"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="виктор_христенко" target="виктор_чемезов" label="друг
+;http://goo.gl/ohEX4
+">
+        <attvalues>
+          <attvalue for="weight" value="1.0"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="виктор_христенко" target="андрей_реус" label="друг
+;http://goo.gl/ohEX4
+">
+        <attvalues>
+          <attvalue for="weight" value="1.0"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="татьяна_голикова" target="виктор_чемезов" label="друг
+;http://goo.gl/ohEX4
+">
+        <attvalues>
+          <attvalue for="weight" value="1.0"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="татьяна_голикова" target="андрей_реус" label="друг
+;http://goo.gl/ohEX4
+">
+        <attvalues>
+          <attvalue for="weight" value="1.0"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="татьяна_голикова" target="лев_григорьев" label="друг
+;служба
+">
+        <attvalues>
+          <attvalue for="weight" value="1.0"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="татьяна_голикова" target="ирина_сакаева" label="двоюрод;служба
+">
+        <attvalues>
+          <attvalue for="weight" value="1.0"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="татьяна_голикова" target="александр_миронов" label="служба
+;http://goo.gl/ohEX4
+">
+        <attvalues>
+          <attvalue for="weight" value="1.0"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="виктор_чемезов" target="андрей_реус" label="служба
+;служба
+">
+        <attvalues>
+          <attvalue for="weight" value="1.0"></attvalue>
+        </attvalues>
+      </edge>
+      <edge source="виктор_чемезов" target="лев_григорьев" label="лобби
+;служба
+">
+        <attvalues>
+          <attvalue for="weight" value="1.0"></attvalue>
+        </attvalues>
+      </edge>
+    </edges>
+  </graph>
+</gexf>

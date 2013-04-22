@@ -2,21 +2,38 @@
 __author__ = 'baio'
 import xml.etree.ElementTree as ET
 import codecs
+import regex
+import re
+
+def parse_line(line, perv_url):
+    if not line or len(line.strip()) == 0:
+        raise ValueError("STR_EMPTY")
+    line = line.strip()
+    spt = line.split('-')
+    if len(spt) == 3:
+        name_1 = spt[0]
+        name_2 = spt[1]
+        attrs = spt[2]
+        attrs_spt = attrs.split(',')
+        if not (len(attrs_spt) == 2 or (len(attrs_spt) == 1 and perv_url)):
+            raise ValueError("STR_ENTRY_EMPTY")
+        if not regex.match("^^.[а-яА-Я\.]+^.$", attrs_spt[0]):
+            raise ValueError("STR_TAG_FORMAT")
+        link_types = attrs_spt[0].split('.')
+        url = attrs_spt[1] if len(attrs_spt) == 2 else perv_url
+        (name_1, name_2, link_types, url)
+    else:
+        raise ValueError("STR_FORMAT")
+
 
 def get_edges(in_txt):
     with codecs.open(in_txt, "r", "utf-8") as f:
         for line in f.readlines():
             if line:
-                spt = line.split('-')
-                if len(spt) == 3:
-                    name_1 = spt[0]
-                    name_2 = spt[1]
-                    attrs = spt[2]
-                    attrs_spt = attrs.split(',')
-                    link_types = attrs_spt[0].split('.')
-                    url = attrs_spt[1] if len(attrs_spt) == 2 else perv_url
-                    perv_url = url
-                    yield (name_1, name_2, link_types, url)
+                buck = parse_line(line, perv_url)
+                perv_url = buck[3]
+                yield buck
+
 
 def get_elements(in_txt):
     edges = list(get_edges(in_txt))
@@ -25,6 +42,7 @@ def get_elements(in_txt):
     for name in set([x[0] for x in edges] + [x[1] for x in edges]):
         nodes.append(name)
     return nodes, edges
+
 
 def get_xml_elements(in_txt):
     nodes, edges = get_elements(in_txt)
@@ -43,6 +61,7 @@ def get_xml_elements(in_txt):
         edge_els.append(edge_el)
     return node_els, edge_els
 
+
 def merge_xml_elements(in_txt, merge_xml):
     nodes, edges = get_xml_elements(in_txt)
     ET.register_namespace("", "http://www.gexf.net/1.2draft")
@@ -57,11 +76,10 @@ def merge_xml_elements(in_txt, merge_xml):
         xml_edges.append(edge)
     xml.write("_" + merge_xml, "utf-8", xml_declaration=True)
 
-
-
-
-
-merge_xml_elements("contribs/baio_130418.txt", "template.gexf")
+"""
+if __name__ == '__main__':
+    merge_xml_elements("contribs/baio_130418.txt", "template.gexf")
+"""
 
 
 

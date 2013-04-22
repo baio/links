@@ -7,6 +7,13 @@ import re
 
 _cryllic = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюяабвгдеёжзийклмнопрстуфхцчшщъыьэюя'
 
+def parse_lines(lines):
+    for line in lines:
+        if line:
+            buck = parse_line(line, perv_url)
+            perv_url = buck[3]
+            yield buck
+
 def parse_line(line, perv_url):
     if not line or len(line.strip()) == 0:
         raise ValueError("STR_EMPTY")

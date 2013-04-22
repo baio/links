@@ -5,6 +5,8 @@ import codecs
 import regex
 import re
 
+_cryllic = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюяабвгдеёжзийклмнопрстуфхцчшщъыьэюя'
+
 def parse_line(line, perv_url):
     if not line or len(line.strip()) == 0:
         raise ValueError("STR_EMPTY")
@@ -15,13 +17,34 @@ def parse_line(line, perv_url):
         name_2 = spt[1]
         attrs = spt[2]
         attrs_spt = attrs.split(',')
+
         if not (len(attrs_spt) == 2 or (len(attrs_spt) == 1 and perv_url)):
             raise ValueError("STR_ENTRY_EMPTY")
-        if not regex.match("^^.[а-яА-Я\.]+^.$", attrs_spt[0]):
+
+        if not name_1 \
+            or not name_2 \
+            or not regex.match("^["+_cryllic+"\s]+$", name_1)\
+            or not regex.match("^["+_cryllic+"\s]+$", name_2)\
+            or len(name_1.split(' ')) != 2\
+            or len(name_2.split(' ')) != 2:
+                raise ValueError("STR_NAME_FORMAT")
+
+        if len(attrs_spt) == 2 and perv_url:
             raise ValueError("STR_TAG_FORMAT")
+        if not regex.match("^(?!\.)["+_cryllic+"\.]+(?<!\.)$", attrs_spt[0]):
+            raise ValueError("STR_TAG_FORMAT")
+
         link_types = attrs_spt[0].split('.')
+
+        if filter(lambda x: not x, link_types):
+            raise ValueError("STR_TAG_FORMAT")
+
         url = attrs_spt[1] if len(attrs_spt) == 2 else perv_url
-        (name_1, name_2, link_types, url)
+
+        if not regex.match("http://[\w\.]+/[\w]+$", url):
+            raise ValueError("STR_LINK_FORMAT")
+
+        return (name_1, name_2, link_types, url)
     else:
         raise ValueError("STR_FORMAT")
 
@@ -30,23 +53,9 @@ def get_edges(in_txt):
     with codecs.open(in_txt, "r", "utf-8") as f:
         for line in f.readlines():
             if line:
-<<<<<<< HEAD:converters/contrib2gexf.py
                 buck = parse_line(line, perv_url)
                 perv_url = buck[3]
                 yield buck
-
-=======
-                spt = line.split('-')
-                if len(spt) == 3:
-                    name_1 = spt[0]
-                    name_2 = spt[1]
-                    attrs = spt[2]
-                    attrs_spt = attrs.split(',')
-                    link_types = attrs_spt[0].split('.')
-                    url = attrs_spt[1] if len(attrs_spt) == 2 else perv_url
-                    perv_url = url
-                    yield (name_1.strip('\r\n'), name_2.strip('\r\n'), [x.strip('\r\n') for x in link_types], url.strip('\r\n'))
->>>>>>> e23929cdd9b6e30c94b526183d86e35af95a6adf:contrib2gexf.py
 
 def get_elements(in_txt):
     edges = list(get_edges(in_txt))
@@ -56,8 +65,6 @@ def get_elements(in_txt):
         nodes.append(name)
     return nodes, edges
 
-<<<<<<< HEAD:converters/contrib2gexf.py
-=======
 def get_attr_rel_for(rel):
     return {
         u"брат" : "family_rel",
@@ -72,8 +79,6 @@ def get_attr_rel_for(rel):
         u"партнер" : "prof_rel"
 
     }[rel];
-
->>>>>>> e23929cdd9b6e30c94b526183d86e35af95a6adf:contrib2gexf.py
 
 def get_xml_elements(in_txt):
     nodes, edges = get_elements(in_txt)
@@ -120,14 +125,8 @@ def merge_xml_elements(in_txt, merge_xml):
         xml_edges.append(edge)
     xml.write("_" + merge_xml, "utf-8", xml_declaration=True)
 
-<<<<<<< HEAD:converters/contrib2gexf.py
-"""
 if __name__ == '__main__':
     merge_xml_elements("contribs/baio_130418.txt", "template.gexf")
-"""
-=======
-merge_xml_elements("contribs/baio_130418.txt", "template.gexf")
->>>>>>> e23929cdd9b6e30c94b526183d86e35af95a6adf:contrib2gexf.py
 
 
 

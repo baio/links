@@ -4,7 +4,6 @@ __author__ = 'baio'
 import unittest
 from converters.contrib2gexf import parse_line
 
-
 class TestContrib2Gexf(unittest.TestCase):
 
     def test_empty(self):
@@ -118,14 +117,6 @@ class TestContrib2Gexf(unittest.TestCase):
         self.assertEquals("брат", buck[2][0])
         self.assertEquals("служба", buck[2][1])
         self.assertEquals("http://goo.gl/ohEX4", buck[3])
-
-    """
-    def test_names_similarity(self):
-        pass
-
-    def test_tags_in_list(self):
-        pass
-    """
 
 if __name__ == '__main__':
     unittest.main()

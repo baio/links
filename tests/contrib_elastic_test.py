@@ -26,5 +26,6 @@ class TestContribElastic(unittest.TestCase):
         self.assertEquals(res[0], True)
 
 if __name__ == '__main__':
+    #es._init("../data")
     unittest.main()
 

@@ -27,9 +27,18 @@ def check_tags(tags):
     for tag in tags:
         yield True if _req("tag", "tags/tag/_search?q=tag:"+tag) else False
 
-def append_names(names):
+def _append(names, q, fileld_name):
     r = []
     for name in names:
-        res = req.post(_elastic_host_url + "names/name/" + name.replace(" ", "_"), data=json.dumps({"name": name}))
+        res = req.post(_elastic_host_url + q + name.replace(" ", "_"), data=json.dumps({fileld_name: name}))
         r.append(res.json()["ok"])
     return r
+
+def append_names(names):
+    return _append(names, "names/name/", "name")
+
+def _init(dir):
+    with open(dir + "/names.txt") as f:
+        _append(filter(lambda x: x, map(lambda x: x.strip("\r\n "), f.readlines())), "names/name/", "name")
+    with open(dir + "/tags.txt") as f:
+        _append(filter(lambda x: x, map(lambda x: x.strip("\r\n "), f.readlines())), "tags/tag/", "tag")

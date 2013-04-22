@@ -2,12 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5436cda8-27dd-4555-a438-c648eccba158" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/es/__init__.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tests/contrib_elastic_test.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/es/elastic_search.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/names_init.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/tags_init.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/contrib2gexf_parse_line_test.py" afterPath="$PROJECT_DIR$/tests/contrib2gexf_parse_line_test.py" />
+      <change type="MOVED" beforePath="C:\dev\py\links\data\names_init.txt" afterPath="$PROJECT_DIR$/data/names.txt" />
+      <change type="MOVED" beforePath="C:\dev\py\links\data\tags_init.txt" afterPath="$PROJECT_DIR$/data/tags.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/contrib_elastic_test.py" afterPath="$PROJECT_DIR$/tests/contrib_elastic_test.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/es/elastic_search.py" afterPath="$PROJECT_DIR$/es/elastic_search.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="links.iws" />
@@ -16,8 +14,8 @@
     <file path="/fragment.py" changelist="5436cda8-27dd-4555-a438-c648eccba158" time="1366628415679" ignored="false" />
     <file path="/contrib2gexf.py" changelist="5436cda8-27dd-4555-a438-c648eccba158" time="1366614803798" ignored="false" />
     <file path="/contrib2gexf_parse_line_test.py" changelist="5436cda8-27dd-4555-a438-c648eccba158" time="1366615240489" ignored="false" />
-    <file path="/contrib_elastic_test.py" changelist="5436cda8-27dd-4555-a438-c648eccba158" time="1366628650928" ignored="false" />
-    <file path="/elastic_search.py" changelist="5436cda8-27dd-4555-a438-c648eccba158" time="1366628906976" ignored="false" />
+    <file path="/contrib_elastic_test.py" changelist="5436cda8-27dd-4555-a438-c648eccba158" time="1366630339077" ignored="false" />
+    <file path="/elastic_search.py" changelist="5436cda8-27dd-4555-a438-c648eccba158" time="1366630189119" ignored="false" />
     <file path="/elasticsearch.yml" changelist="5436cda8-27dd-4555-a438-c648eccba158" time="1366616348479" ignored="false" />
     <file path="$APPLICATION_HOME_DIR$/helpers/pydev/pydev_monkey.py" changelist="5436cda8-27dd-4555-a438-c648eccba158" time="1366623043220" ignored="false" />
     <file path="$APPLICATION_HOME_DIR$/helpers/pydev/pydevd_additional_thread_info.py" changelist="5436cda8-27dd-4555-a438-c648eccba158" time="1366623043220" ignored="false" />
@@ -25,6 +23,7 @@
     <file path="$APPLICATION_HOME_DIR$/helpers/pydev/pydevd_signature.py" changelist="5436cda8-27dd-4555-a438-c648eccba158" time="1366623043220" ignored="false" />
     <file path="$APPLICATION_HOME_DIR$/helpers/pydev/pydevd_frame.py" changelist="5436cda8-27dd-4555-a438-c648eccba158" time="1366623043220" ignored="false" />
     <file path="/tags_init.txt" changelist="5436cda8-27dd-4555-a438-c648eccba158" time="1366626131776" ignored="false" />
+    <file path="/Python Console" changelist="5436cda8-27dd-4555-a438-c648eccba158" time="1366629796081" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,10 +43,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="elastic_search.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="elastic_search.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/es/elastic_search.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="35" column="0" selection-start="924" selection-end="924" vertical-scroll-proportion="0.8071834">
+            <state line="44" column="0" selection-start="1312" selection-end="1312" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="e#45#67#0" expanded="true" />
               </folding>
@@ -85,10 +84,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="contrib_elastic_test.py" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="contrib_elastic_test.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tests/contrib_elastic_test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="23" column="0" selection-start="749" selection-end="749" vertical-scroll-proportion="0.0">
+            <state line="29" column="4" selection-start="938" selection-end="938" vertical-scroll-proportion="0.73378074">
               <folding>
                 <element signature="e#45#60#0" expanded="true" />
               </folding>
@@ -96,8 +95,8 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="tags_init.txt" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/data/tags_init.txt">
+      <file leaf-file-name="tags.txt" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/data/tags.txt">
           <provider selected="true" editor-type-id="text-editor">
             <state line="12" column="0" selection-start="61" selection-end="61" vertical-scroll-proportion="0.0">
               <folding />
@@ -105,8 +104,8 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="names_init.txt" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/data/names_init.txt">
+      <file leaf-file-name="names.txt" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/data/names.txt">
           <provider selected="true" editor-type-id="text-editor">
             <state line="0" column="14" selection-start="14" selection-end="14" vertical-scroll-proportion="0.0">
               <folding />
@@ -166,8 +165,8 @@
         <option value="C:/tools/elasticsearch/config/elasticsearch.yml" />
         <option value="$PROJECT_DIR$/data/tags_init.txt" />
         <option value="$PROJECT_DIR$/data/names_init.txt" />
-        <option value="$PROJECT_DIR$/tests/contrib_elastic_test.py" />
         <option value="$PROJECT_DIR$/es/elastic_search.py" />
+        <option value="$PROJECT_DIR$/tests/contrib_elastic_test.py" />
       </list>
     </option>
   </component>
@@ -247,6 +246,20 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="es" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="links" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="links" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="data" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -442,11 +455,11 @@
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25133404" sideWeight="0.6" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25133404" sideWeight="0.51135135" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.48864865" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.48864865" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -524,7 +537,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state line="40" column="0" selection-start="1295" selection-end="1295" vertical-scroll-proportion="0.0189099">
           <folding>
-            <element signature="e#44#78#0" expanded="true" />
+            <element signature="e#44#78#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -577,23 +590,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/data/tags_init.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="0" selection-start="61" selection-end="61" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/names_init.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="14" selection-start="14" selection-end="14" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/contribs/baio_130418.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state line="27" column="0" selection-start="776" selection-end="792" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Python27/Lib/site-packages/requests/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="637" column="0" selection-start="20498" selection-end="20498" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -607,27 +613,34 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://C:/Python27/Lib/site-packages/requests/models.py">
+    <entry file="file://$PROJECT_DIR$/data/tags.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="637" column="0" selection-start="20498" selection-end="20498" vertical-scroll-proportion="0.0">
+        <state line="12" column="0" selection-start="61" selection-end="61" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tests/contrib_elastic_test.py">
+    <entry file="file://$PROJECT_DIR$/data/names.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="0" selection-start="749" selection-end="749" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#45#60#0" expanded="true" />
-          </folding>
+        <state line="0" column="14" selection-start="14" selection-end="14" vertical-scroll-proportion="0.0">
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/es/elastic_search.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="0" selection-start="924" selection-end="924" vertical-scroll-proportion="0.8071834">
+        <state line="44" column="0" selection-start="1312" selection-end="1312" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="e#45#67#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/contrib_elastic_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="29" column="4" selection-start="938" selection-end="938" vertical-scroll-proportion="0.73378074">
+          <folding>
+            <element signature="e#45#60#0" expanded="true" />
           </folding>
         </state>
       </provider>

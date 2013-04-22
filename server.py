@@ -15,19 +15,21 @@ app = web.application(urls, globals())
 
 class names:
     def GET(self):
-        return es.get_names(web.input().term)
+        return es.get_names_json(web.input().term)
 
 class tags:
     def GET(self):
-        return es.get_tags(web.input().term)
+        return es.get_tags_json(web.input().term)
 
 class links:
     def POST(self):
-        data = web.data()
-        print data
-        stg.store(data)
-        return json.dumps({"ok": True})
-
+        data = web.data().split('\n')
+        errs = stg.store(data)
+        if len(errs) ==  0:
+            return json.dumps({"ok": True})
+        else:
+            e = map(lambda x: {"line": x[0], "code" : x[1]}, errs)
+            return json.dumps({"errors" : e})
 
 if __name__ == "__main__":
     app.run()

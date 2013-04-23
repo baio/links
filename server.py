@@ -7,6 +7,8 @@ from converters.line2bucket import parse_lines
 import simplejson as json
 from converters.contrib2gexf import merge_xml_elements
 
+render = web.template.render('gephi/', cache=False)
+
 urls = [
     '/names', 'names',
     '/tags', 'tags',
@@ -15,20 +17,34 @@ urls = [
 
 app = web.application(urls, globals())
 
+
 class names:
+
     def GET(self):
+        web.header('Access-Control-Allow-Origin','*')
+        web.header('Access-Control-Allow-Credentials','true')
+        web.header('Content-Type', 'application/json')
         return es.get_names_json(web.input().term)
 
 class tags:
     def GET(self):
+        web.header('Access-Control-Allow-Origin','*')
+        web.header('Access-Control-Allow-Credentials','true')
+        web.header('Content-Type', 'application/json')
         return es.get_tags_json(web.input().term)
 
 class links:
 
     def GET(self):
-        raise web.seeother("/static/layout.gexf")
+        web.header('Access-Control-Allow-Origin','*')
+        web.header('Access-Control-Allow-Credentials','true')
+        web.header('Content-Type', 'application/xml')
+        return render.layout()
 
     def POST(self):
+        web.header('Access-Control-Allow-Origin','*')
+        web.header('Access-Control-Allow-Credentials','true')
+        web.header('Content-Type', 'application/json')
         lines = web.data().split('\n')
         bucks, errs  = parse_lines(lines)
         if len(errs) ==  0:

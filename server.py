@@ -51,7 +51,7 @@ class links:
             stg.store(bucks)
             names = set([x[0] for x in bucks] + [x[1] for x in bucks])
             es.append_names(names)
-            merge_xml_elements(bucks, "static/layout.gexf")
+            merge_xml_elements(bucks, "gephi/layout.gexf")
             return json.dumps({"ok": True})
         else:
             e = map(lambda x: {"line": x[0], "code" : x[1]}, errs)

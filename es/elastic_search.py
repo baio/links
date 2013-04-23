@@ -9,7 +9,7 @@ from config.config import config
 _elastic_host_url = config["ES_URI"]
 
 def _req_hits(q):
-    res = req.get(_elastic_host_url + q)
+    res = req.get(_elastic_host_url + "/" + q)
     hits = yaml.load(res.content)["hits"]
     return hits["hits"] if len(hits) > 0 else []
 
@@ -45,7 +45,7 @@ def check_tags(tags):
 def _append(q, name_items_dict):
     r = []
     for name in name_items_dict:
-        res = req.post(_elastic_host_url + q + name.replace(" ", "_"), data=json.dumps(name_items_dict[name]))
+        res = req.post(_elastic_host_url + "/" + q + name.replace(" ", "_"), data=json.dumps(name_items_dict[name]))
         r.append(res.json()["ok"])
     return r
 

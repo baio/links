@@ -7,7 +7,7 @@ from es import elastic_search as es
 class TestContribElastic(unittest.TestCase):
 
     def test_names_similarity(self):
-        res = list(es.get_similar_names([u"fhirwehfieryhfl", u"ленна скрыник", u"елена скрынник"]))
+        res = list(es.get_similar_names([u"fhirwehfieryhfl", u"еленна скрыник", u"елена скрынник"]))
         self.assertEquals(len(res), 3)
         self.assertEquals(res[0], False)
         self.assertEquals(res[1], u"елена скрынник")
@@ -26,6 +26,6 @@ class TestContribElastic(unittest.TestCase):
         self.assertEquals(res[0], True)
 
 if __name__ == '__main__':
-    es._init("data")
-    #unittest.main()
+    #es._init("data")
+    unittest.main()
 

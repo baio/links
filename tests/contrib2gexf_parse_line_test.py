@@ -2,7 +2,7 @@
 __author__ = 'baio'
 
 import unittest
-from converters.contrib2gexf import parse_line
+from converters.line2bucket import parse_line
 
 class TestContrib2Gexf(unittest.TestCase):
 

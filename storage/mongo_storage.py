@@ -1,20 +1,17 @@
 __author__ = 'baio'
 
 import pymongo as mongo
-from converters import contrib2gexf as contrib
 import datetime as dt
 
-def store(lines):
-    client = mongo.MongoClient('ds039447.mongolab.com', 39447)
+def store(bucks):
+    client = mongo.MongoClient('mongodb://adm:123@ds039447.mongolab.com:39447/links')
     db = client.links
-    bucks, errs = list(contrib.parse_lines(lines))
-    if len(errs) == 0:
-        now = dt.datetime.now()
-        ctb = {
-            "name": "{}_{}".format("baio", now),
-            "data": bucks,
-            "date": now
-        }
-        db.insert(ctb)
-    return errs
+    now = dt.datetime.now()
+    data = map(lambda x: {"name_1" : x[0], "name_2" : x[1], "tags" : x[2], "url" : x[3]}, bucks)
+    ctb = {
+        "_id": "{}_{}".format("baio", now.strftime("%Y%m%dT%M%S")),
+        "data": data,
+        "date": now
+    }
+    db.contribs.save(ctb)
 

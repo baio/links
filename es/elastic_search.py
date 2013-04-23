@@ -23,16 +23,16 @@ def _req(q):
 
 def get_similar_names(names):
     for name in names:
+        sim_name = False
         spts = name.split(' ')
-        sim_name = _req(u"names/name/_search?q=(fname:{0}~0.7 AND lname:{1}~0.7) OR (fname:{1}~0.7 AND lname:{0}~0.7)"
-            .format(spts[0], spts[1]))
-        if sim_name:
-            if sim_name["fname"] == spts[0] and sim_name["lname"] == spts[1]:
-                sim_name = True
-            else:
-                sim_name = u"{} {}".format(sim_name["fname"], sim_name["lname"])
-        else:
-            sim_name = False
+        if len(spts) == 2:
+            sim_name = _req(u"names/name/_search?q=(fname:{0}~0.7 AND lname:{1}~0.7) OR (fname:{1}~0.7 AND lname:{0}~0.7)"
+                .format(spts[0], spts[1]))
+            if sim_name:
+                if sim_name["fname"] == spts[0] and sim_name["lname"] == spts[1]:
+                    sim_name = True
+                else:
+                    sim_name = u"{} {}".format(sim_name["fname"], sim_name["lname"])
         yield sim_name
 
 

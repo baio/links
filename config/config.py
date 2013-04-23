@@ -13,4 +13,4 @@ def _product_config():
         "ES_URI" : os.environ['ES_URI']
     }
 
-config = _product_config() if os.getenv("key", None) == 'production' else _dev_config()
+config = _product_config() if os.getenv("ENV", None) == 'production' else _dev_config()

@@ -13,6 +13,7 @@ def parse_lines(lines):
     errors = []
     for idx, line in enumerate(lines):
         if line:
+            line = unicode(line, "utf-8")
             try:
                 buck = parse_line(line, perv_url)
                 perv_url = buck[3]

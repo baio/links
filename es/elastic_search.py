@@ -13,41 +13,52 @@ def _req_hits(q):
     return hits["hits"] if len(hits) > 0 else []
 
 
-def _req(name, q):
+def _req(q):
     hits = _req_hits(q)
     if len(hits):
-        return hits[0]["_source"][name]
+        return hits[0]["_source"]
     else:
-        return False
+        return None
 
 
 def get_similar_names(names):
     for name in names:
-        sim_name = _req("name", "names/name/_search?q=name:"+name+"~0.7")
+        spts = name.split(' ')
+        sim_name = _req(u"names/name/_search?q=(fname:{0}~0.7 AND lname:{1}~0.7) OR (fname:{1}~0.7 AND lname:{0}~0.7)"
+            .format(spts[0], spts[1]))
         if sim_name:
-            if sim_name == name:
+            if sim_name["fname"] == spts[0] and sim_name["lname"] == spts[1]:
                 sim_name = True
+            else:
+                sim_name = u"{} {}".format(sim_name["fname"], sim_name["lname"])
+        else:
+            sim_name = False
         yield sim_name
 
 
 def check_tags(tags):
     for tag in tags:
-        yield True if _req("tag", "tags/tag/_search?q=tag:"+tag) else False
+        yield True if _req("tags/tag/_search?q=tag:"+tag) else False
 
 
-def _append(names, q, field_name):
+def _append(q, name_items_dict):
     r = []
-    for name in names:
-        res = req.post(_elastic_host_url + q + name.replace(" ", "_"), data=json.dumps({field_name: name}))
+    for name in name_items_dict:
+        res = req.post(_elastic_host_url + q + name.replace(" ", "_"), data=json.dumps(name_items_dict[name]))
         r.append(res.json()["ok"])
     return r
 
 
 def append_names(names):
-    return _append(names, "names/name/", "name")
+    ns = map(lambda x: {"fname" : x.split(' ')[0], "lname" : x.split(' ')[1]}, names)
+    return _append("names/name/", dict(zip(names, ns)))
+
+def append_tags(tags):
+    ts = map(lambda x: {"tag" : x}, tags)
+    return _append("tags/tag/", dict(zip(tags, ts)))
 
 def get_names(term):
-    hits = _req_hits("names/name/_search?q=name:"+term+"~0.7")
+    hits = _req_hits("names/name/_search?q=lname:"+term+"~0.7")
     return map(lambda x: {"key": x["_id"], "val": x["_source"]["name"]}, hits)
 
 def get_names_json(term):
@@ -65,6 +76,6 @@ def get_tags_json(term):
 
 def _init(dir):
     with open(dir + "/names.txt") as f:
-        _append(filter(lambda x: x, map(lambda x: x.strip("\r\n "), f.readlines())), "names/name/", "name")
+        append_names(filter(lambda x: x, map(lambda x: x.strip("\r\n "), f.readlines())))
     with open(dir + "/tags.txt") as f:
-        _append(filter(lambda x: x, map(lambda x: x.strip("\r\n "), f.readlines())), "tags/tag/", "tag")
+        append_tags(filter(lambda x: x, map(lambda x: x.strip("\r\n "), f.readlines())))

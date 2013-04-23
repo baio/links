@@ -111,6 +111,10 @@ class TestContrib2Gexf(unittest.TestCase):
             parse_line(u"илена скрынник-виктор христенко-брат.служба,http://goo.gl/ohEX4", None)
         except ValueError as err:
             self.assertEqual(u"STR_SIMILAR_NAME:илена скрынник,елена скрынник", err.message)
+        try:
+            parse_line(u"скрынник елена-виктор христенко-брат.служба,http://goo.gl/ohEX4", None)
+        except ValueError as err:
+            self.assertEqual(u"STR_SIMILAR_NAME:скрынник елена,елена скрынник", err.message)
 
     def test_tags_not_found(self):
         try:

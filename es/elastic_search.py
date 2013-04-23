@@ -4,8 +4,9 @@ __author__ = 'baio'
 import requests as req
 import simplejson as json
 import yaml
+from config.config import config
 
-_elastic_host_url = "http://localhost:9200/"
+_elastic_host_url = config["ES_URI"]
 
 def _req_hits(q):
     res = req.get(_elastic_host_url + q)

@@ -9,8 +9,8 @@ _elastic_host_url = "http://localhost:9200/"
 
 def _req_hits(q):
     res = req.get(_elastic_host_url + q)
-    hits = yaml.load(res.content)["hits"]["hits"]
-    return hits
+    hits = yaml.load(res.content)["hits"]
+    return hits["hits"] if len(hits) > 0 else []
 
 
 def _req(name, q):
@@ -46,16 +46,20 @@ def _append(names, q, field_name):
 def append_names(names):
     return _append(names, "names/name/", "name")
 
-
 def get_names(term):
     hits = _req_hits("names/name/_search?q=name:"+term+"~0.7")
-    res = map(lambda x: {"key": x["_id"], "val": x["_source"]["name"]}, hits)
-    return json.dumps(res)
+    return map(lambda x: {"key": x["_id"], "val": x["_source"]["name"]}, hits)
 
+def get_names_json(term):
+    res = get_names(term)
+    return json.dumps(res)
 
 def get_tags(term):
     hits = _req_hits("tags/tag/_search?q=tag:"+term+"~0.7")
-    res = map(lambda x: {"key": x["_id"], "val": x["_source"]["tag"]}, hits)
+    return map(lambda x: {"key": x["_id"], "val": x["_source"]["tag"]}, hits)
+
+def get_tags_json(term):
+    res = get_tags(term)
     return json.dumps(res)
 
 

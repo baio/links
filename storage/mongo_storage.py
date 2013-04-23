@@ -7,12 +7,14 @@ import datetime as dt
 def store(lines):
     client = mongo.MongoClient('ds039447.mongolab.com', 39447)
     db = client.links
-    bucks = contrib.parse_lines(lines)
-    now = dt.now()
-    ctb = {
-        "name": "{}_{}".format("baio", now),
-        "data": bucks,
-        "date": dt
-    }
-    db.insert(ctb)
+    bucks, errs = list(contrib.parse_lines(lines))
+    if len(errs) == 0:
+        now = dt.datetime.now()
+        ctb = {
+            "name": "{}_{}".format("baio", now),
+            "data": bucks,
+            "date": now
+        }
+        db.insert(ctb)
+    return errs
 

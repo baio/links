@@ -10,7 +10,7 @@ def _dev_config():
 def _product_config():
     return {
         "MONGO_URI" : os.environ['MONGO_URI'],
-        "ES_URI" : os.environ['ES_URI']
+        "ES_URI" : os.environ['FOUNDELASTICSEARCH_URL']
     }
 
 config = _product_config() if os.getenv("ENV", None) == 'production' else _dev_config()

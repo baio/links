@@ -5,6 +5,7 @@ from es import elastic_search as es
 from storage import mongo_storage as stg
 from converters.line2bucket import parse_lines
 import simplejson as json
+from converters.contrib2gexf import merge_xml_elements
 
 urls = [
     '/names', 'names',
@@ -23,6 +24,10 @@ class tags:
         return es.get_tags_json(web.input().term)
 
 class links:
+
+    def GET(self):
+        raise web.seeother("/static/layout.gexf")
+
     def POST(self):
         lines = web.data().split('\n')
         bucks, errs  = parse_lines(lines)
@@ -30,6 +35,7 @@ class links:
             stg.store(bucks)
             names = set([x[0] for x in bucks] + [x[1] for x in bucks])
             es.append_names(names)
+            merge_xml_elements(bucks, "static/layout.gexf")
             return json.dumps({"ok": True})
         else:
             e = map(lambda x: {"line": x[0], "code" : x[1]}, errs)

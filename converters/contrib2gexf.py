@@ -4,21 +4,12 @@ import xml.etree.ElementTree as ET
 import codecs
 from converters.line2bucket import parse_line
 
-def get_edges(in_txt):
-    with codecs.open(in_txt, "r", "utf-8") as f:
-        for line in f.readlines():
-            if line:
-                buck = parse_line(line, perv_url)
-                perv_url = buck[3]
-                yield buck
 
-def get_elements(in_txt):
-    edges = list(get_edges(in_txt))
-    print edges
+def get_elements(bucks):
     nodes = []
-    for name in set([x[0] for x in edges] + [x[1] for x in edges]):
+    for name in set([x[0] for x in bucks] + [x[1] for x in bucks]):
         nodes.append(name)
-    return nodes, edges
+    return nodes, bucks
 
 def get_attr_rel_for(rel):
     return {
@@ -35,8 +26,8 @@ def get_attr_rel_for(rel):
 
     }[rel];
 
-def get_xml_elements(in_txt):
-    nodes, edges = get_elements(in_txt)
+def get_xml_elements(bucks):
+    nodes, edges = get_elements(bucks)
     node_els = []
     edge_els = []
     for node in nodes:
@@ -63,11 +54,10 @@ def get_xml_elements(in_txt):
     return node_els, edge_els
 
 
-def merge_xml_elements(in_txt, merge_xml):
+def merge_xml_elements(bucks, merge_xml):
     def ns_tag(tag):
         return str(ET.QName('http://www.gexf.net/1.2draft', tag) )
-
-    nodes, edges = get_xml_elements(in_txt)
+    nodes, edges = get_xml_elements(bucks)
     ET.register_namespace("", "http://www.gexf.net/1.2draft")
     parser = ET.XMLParser(encoding="utf-8")
     xml = ET.parse(merge_xml, parser)
@@ -78,10 +68,7 @@ def merge_xml_elements(in_txt, merge_xml):
         xml_nodes.append(node)
     for edge in edges:
         xml_edges.append(edge)
-    xml.write("_" + merge_xml, "utf-8", xml_declaration=True)
-
-if __name__ == '__main__':
-    merge_xml_elements("contribs/baio_130418.txt", "template.gexf")
+    xml.write(merge_xml, "utf-8", xml_declaration=True)
 
 
 

@@ -20,30 +20,30 @@ def store(bucks):
 def contribs2edges():
     """
     function to convert contribs collection items to edges ones
-    edge doc {_id, name_1, name_2, tags [{name, urls[]}]}
+    edge doc {_id, name_1, name_2, tags [{name, urls[]}], cbs : []}
     ===========================================================
+    if src in srcs then skip
     if name_1 and name_2 not found then insert new doc
     if tag.name not found then insert new tag
     if tag.url not found then insert new url
     """
     client = mongo.MongoClient(config["MONGO_URI"])
     db = client.links
-    db.edges.remove()
     for contrib in db.contribs.find():
         for item in contrib["data"]:
             id = u"{} {}".format(item["name_1"], item["name_2"]).replace(" ", "_")
             edge = db.edges.find_one({"_id" : id})
             if not edge:
-                edge = {"_id" : id, "name_1" : item["name_1"], "name_2" : item["name_2"], "tags" : []}
-            for tag in item["tags"]:
-                edge_tag = filter(lambda x: x["name"] == tag, edge["tags"])
-                if len(edge_tag):
-                    edge_tag = edge_tag[0]
-                else:
-                    edge_tag = {"name" : tag, "urls" : []}
-                    edge["tags"].append(edge_tag)
-                if item["url"] not in edge_tag["urls"]:
-                    edge_tag["urls"].append(item["url"])
-            db.edges.save(edge)
-
-
+                edge = {"_id" : id, "name_1" : item["name_1"], "name_2" : item["name_2"], "tags" : [], "cbs" : []}
+            if contrib["_id"] not in edge["cbs"]:
+                edge["cbs"].append(contrib["_id"])
+                for tag in item["tags"]:
+                    edge_tag = filter(lambda x: x["name"] == tag, edge["tags"])
+                    if len(edge_tag):
+                        edge_tag = edge_tag[0]
+                    else:
+                        edge_tag = {"name" : tag, "urls" : []}
+                        edge["tags"].append(edge_tag)
+                    if item["url"] not in edge_tag["urls"]:
+                        edge_tag["urls"].append(item["url"])
+                db.edges.save(edge)

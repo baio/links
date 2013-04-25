@@ -53,3 +53,9 @@ def get_bucks():
     for edge in db.edges.find():
         yield (edge["name_1"], edge["name_2"], list(x["name"] for x in edge["tags"]),
                    "|".join(set(sum([x["urls"] for x in edge["tags"]],[]))))
+
+def store_nodes(nodes):
+    client = mongo.MongoClient(config["MONGO_URI"])
+    db = client.links
+    for node in nodes:
+        db.nodes.save({"_id" : node[0], "pos" : node[1]})

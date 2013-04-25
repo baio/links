@@ -21,4 +21,4 @@ def get_nodes_root(xml_root):
     xml_nodes = xml_root.find(ns_tag("graph")).find(ns_tag("nodes"))
     for node in xml_nodes:
         pos = node.find(viz_tag("position"))
-        yield { "id" : node.get("id"), "pos" : [float(pos.get("x")), float(pos.get("y"))] }
+        yield (node.get("id"), [float(pos.get("x")), float(pos.get("y"))])

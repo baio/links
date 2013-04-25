@@ -4,6 +4,7 @@ __author__ = 'baio'
 import unittest
 from storage import mongo_storage as stg
 from converters.line2bucket import parse_line
+from converters.gexf2nodes import get_nodes_file
 
 class TestMongoStorage(unittest.TestCase):
 
@@ -16,8 +17,13 @@ class TestMongoStorage(unittest.TestCase):
     def test_contribs2edges(self):
         stg.contribs2edges()
 
+    @unittest.skip("demonstrating skipping")
     def test_get_bucks(self):
         print list(stg.get_bucks())
+
+    def test_store_nodes(self):
+        nodes = get_nodes_file("gephi/main.gexf")
+        stg.store_nodes(nodes)
 
 if __name__ == '__main__':
     #es._init("data")

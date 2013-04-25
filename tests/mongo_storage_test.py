@@ -12,8 +12,12 @@ class TestMongoStorage(unittest.TestCase):
         buck = parse_line(u"елена скрынник-виктор христенко-брат.служба,http://goo.gl/ohEX4", None)
         stg.store([buck])
 
+    @unittest.skip("demonstrating skipping")
     def test_contribs2edges(self):
         stg.contribs2edges()
+
+    def test_get_bucks(self):
+        print list(stg.get_bucks())
 
 if __name__ == '__main__':
     #es._init("data")

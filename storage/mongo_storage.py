@@ -47,12 +47,18 @@ def contribs2edges():
                     edge_tag["urls"].append(item["url"])
             db.edges.save(edge)
 
-def get_bucks():
+def get_edges():
     client = mongo.MongoClient(config["MONGO_URI"])
     db = client.links
     for edge in db.edges.find():
         yield (edge["name_1"], edge["name_2"], list(x["name"] for x in edge["tags"]),
                    "|".join(set(sum([x["urls"] for x in edge["tags"]],[]))))
+
+def get_nodes():
+    client = mongo.MongoClient(config["MONGO_URI"])
+    db = client.links
+    for node in db.nodes.find():
+        yield (node["_id"], node["pos"])
 
 def store_nodes(nodes):
     client = mongo.MongoClient(config["MONGO_URI"])

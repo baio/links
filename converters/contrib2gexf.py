@@ -2,11 +2,14 @@
 __author__ = 'baio'
 import xml.etree.ElementTree as ET
 
-def get_elements(bucks):
+def get_elements(edge_bucks, node_bucks):
     nodes = []
-    for name in set([x[0] for x in bucks] + [x[1] for x in bucks]):
-        nodes.append(name)
-    return nodes, bucks
+    for name in set([x[0] for x in edge_bucks] + [x[1] for x in edge_bucks]):
+        pos = [-1,-1]
+        node_buck = filter(lambda x: x[0] == name.replace(" ", "_"), node_bucks)
+        if len(node_buck) > 0: pos = node_buck[0][1]
+        nodes.append((name, pos))
+    return edge_bucks, nodes
 
 def get_attr_rel_for(rel):
     return {
@@ -23,14 +26,20 @@ def get_attr_rel_for(rel):
 
     }[rel];
 
-def get_xml_elements(bucks):
-    nodes, edges = get_elements(bucks)
+def get_xml_elements(edge_bucks, node_bucks):
+    def viz_tag(tag):
+        return str(ET.QName('http://www.gexf.net/1.2draft/viz', tag) )
+    edges, nodes = get_elements(edge_bucks, node_bucks)
     node_els = []
     edge_els = []
     for node in nodes:
         node_el = ET.Element("node")
-        node_el.attrib["id"] = node.replace(" ", "_").strip()
-        node_el.attrib["label"] = node.strip()
+        node_el.attrib["id"] = node[0].replace(" ", "_").strip()
+        node_el.attrib["label"] = node[0].strip()
+        attr_pos = ET.Element(viz_tag("position"))
+        node_el.append(attr_pos)
+        attr_pos.attrib["x"] = str(node[1][0])
+        attr_pos.attrib["y"] = str(node[1][1])
         node_els.append(node_el)
     for edge in edges:
         edge_el = ET.Element("edge")
@@ -48,14 +57,15 @@ def get_xml_elements(bucks):
         attr_val_el.attrib["for"] = "url"
         attr_val_el.attrib["value"] = edge[3]
         edge_els.append(edge_el)
-    return node_els, edge_els
+    return edge_els, node_els
 
 
-def merge_xml_elements(bucks, merge_xml):
+def merge_xml_elements(edge_bucks, node_bucks, merge_xml):
     def ns_tag(tag):
         return str(ET.QName('http://www.gexf.net/1.2draft', tag) )
-    nodes, edges = get_xml_elements(bucks)
+    edges, nodes  = get_xml_elements(edge_bucks, node_bucks)
     ET.register_namespace("", "http://www.gexf.net/1.2draft")
+    ET.register_namespace("viz", "http://www.gexf.net/1.2draft/viz")
     parser = ET.XMLParser(encoding="utf-8")
     xml = ET.parse(merge_xml, parser)
     xml_root = xml.getroot()

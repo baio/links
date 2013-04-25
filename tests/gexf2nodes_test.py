@@ -14,6 +14,5 @@ class TestGexf2nodes(unittest.TestCase):
         print list(gexf2nodes.get_nodes_file("gephi/main.gexf"))
 
 if __name__ == '__main__':
-    #es._init("data")
     unittest.main()
 

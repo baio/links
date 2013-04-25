@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 __author__ = 'baio'
 import xml.etree.ElementTree as ET
-import codecs
-from converters.line2bucket import parse_line
-
 
 def get_elements(bucks):
     nodes = []

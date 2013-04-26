@@ -21,13 +21,14 @@ app = web.application(urls, globals())
 class gexf:
 
     def GET(self):
+        print "gexf download"
         web.header('Access-Control-Allow-Origin','*')
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/xml')
         return render.layout()
 
     def POST(self):
-        "upload file"
+        print "gexf uload"
         web.header('Access-Control-Allow-Origin','*')
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/json')
@@ -58,6 +59,7 @@ class links:
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/json')
         lines = web.data().split('\n')
+        print lines
         errs  = update_links(lines)
         if len(errs) ==  0:
             return json.dumps({"ok" : True})

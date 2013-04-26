@@ -30,10 +30,12 @@ def contribs2edges():
     """
     client = mongo.MongoClient(config["MONGO_URI"])
     db = client.links
+    db.edges.remove()
+    edges = dict()
     for contrib in db.contribs.find():
         for item in contrib["data"]:
             id = u"{} {}".format(item["name_1"], item["name_2"]).replace(" ", "_")
-            edge = db.edges.find_one({"_id" : id})
+            edge = edges.get(id) #db.edges.find_one({"_id" : id}))
             if not edge:
                 edge = {"_id" : id, "name_1" : item["name_1"], "name_2" : item["name_2"], "tags" : []}
             for tag in item["tags"]:
@@ -45,7 +47,9 @@ def contribs2edges():
                     edge["tags"].append(edge_tag)
                 if item["url"] not in edge_tag["urls"]:
                     edge_tag["urls"].append(item["url"])
-            db.edges.save(edge)
+            if id not in edges:
+                edges[id] = edge
+    db.edges.insert(edges.values())
 
 def get_edges():
     client = mongo.MongoClient(config["MONGO_URI"])

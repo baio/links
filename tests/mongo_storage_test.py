@@ -13,7 +13,6 @@ class TestMongoStorage(unittest.TestCase):
         buck = parse_line(u"елена скрынник-виктор христенко-брат.служба,http://goo.gl/ohEX4", None)
         stg.store([buck])
 
-    @unittest.skip("demonstrating skipping")
     def test_contribs2edges(self):
         stg.contribs2edges()
 
@@ -21,6 +20,7 @@ class TestMongoStorage(unittest.TestCase):
     def test_get_bucks(self):
         print list(stg.get_bucks())
 
+    @unittest.skip("demonstrating skipping")
     def test_store_nodes(self):
         nodes = get_nodes_file("gephi/main.gexf")
         stg.store_nodes(nodes)

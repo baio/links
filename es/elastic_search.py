@@ -13,6 +13,11 @@ def _req_hits(q):
     hits = yaml.load(res.content)["hits"]
     return hits["hits"] if len(hits) > 0 else []
 
+def _req_hits_multi(q, data):
+    d = "{}\n" + "{}\n".join(map(lambda x: json.dumps(x) + "\n", data))
+    res = req.get(_elastic_host_url + "/" + q, data=d)
+    content = yaml.load(res.content)
+    return map(lambda x: x["hits"]["hits"], content["responses"])
 
 def _req(q):
     hits = _req_hits(q)
@@ -21,26 +26,39 @@ def _req(q):
     else:
         return None
 
-
 def get_similar_names(names):
-    for name in names:
-        sim_name = False
+    def name2q(name):
         spts = name.split(' ')
-        if len(spts) == 2:
-            sim_name = _req(u"names/name/_search?q=(fname:{0}~0.7 AND lname:{1}~0.7) OR (fname:{1}~0.7 AND lname:{0}~0.7)"
-                .format(spts[0], spts[1]))
-            if sim_name:
-                if sim_name["fname"] == spts[0] and sim_name["lname"] == spts[1]:
-                    sim_name = True
-                else:
-                    sim_name = u"{} {}".format(sim_name["fname"], sim_name["lname"])
-        yield sim_name
+        return {
+            "filter": {
+                "query": {
+                    "query_string": {
+                        "query": u"fname:{}~0.7 AND lname:{}~0.7".format(spts[0], spts[1])
+                    }
+                }
+            }
+        }
+    def hits2res(name_hits):
+        name = name_hits[0]
+        hits = name_hits[1]
+        if (len(hits) > 0):
+            src = hits[0]["_source"]
+            if src["fname"] + u" " + src["lname"] == name:
+                return True
+            else:
+                return u"{} {}".format(src["fname"], src["lname"])
+        else:
+            return False
+    if len(filter(lambda x: len(x.split(' ')) != 2, names)) > 0:
+        raise ValueError("Name should consists of 2 words separated by space")
+    data = filter(None, map(name2q, names))
+    hits = _req_hits_multi("names/name/_msearch", data)
+    return map(hits2res, zip(names, hits))
 
 
 def check_tags(tags):
     for tag in tags:
         yield True if _req("tags/tag/_search?q=tag:"+tag) else False
-
 
 def _append(q, name_items_dict):
     r = []

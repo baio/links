@@ -38,8 +38,9 @@ def get_xml_elements(edge_bucks, node_bucks):
         node_el.attrib["label"] = node[0].strip()
         attr_pos = ET.Element(viz_tag("position"))
         node_el.append(attr_pos)
-        attr_pos.attrib["x"] = str(node[1][0])
-        attr_pos.attrib["y"] = str(node[1][1])
+        if node[1][0] != -1:
+            attr_pos.attrib["x"] = str(node[1][0])
+            attr_pos.attrib["y"] = str(node[1][1])
         node_els.append(node_el)
     for edge in edges:
         edge_el = ET.Element("edge")

@@ -19,6 +19,30 @@ def _req_hits_multi(q, data):
     content = yaml.load(res.content)
     return map(lambda x: x["hits"]["hits"], content["responses"])
 
+def _req_hits_multi_1(index_data):
+    """
+    index_data - list of buckets:
+    index : index/type for es request
+    data : [requests]
+    """
+    index_data = filter(lambda x: len(x[1]) > 0, index_data)
+    d = "".join(map(lambda x: u"".join(
+                    map(
+                        lambda y: "{}\n{}\n".format(json.dumps({"index" : x[0]}),json.dumps(y)),
+                        x[1]))
+        , index_data))
+    res = req.get(_elastic_host_url + "/_msearch", data=d)
+    content = yaml.load(res.content)
+    hits = map(lambda x: x["hits"]["hits"], content["responses"])
+
+    res = []
+    start_bound = 0
+    for bound in map(lambda x: len(x[1]), index_data):
+        res.append(hits[start_bound:start_bound+bound])
+        start_bound += bound
+
+    return res
+
 def _req(q):
     hits = _req_hits(q)
     if len(hits):
@@ -102,6 +126,49 @@ def check_tags(tags):
     q = map(tag2q, tags)
     hits = _req_hits_multi("tags/tag/_msearch", q)
     return map(hits2res, hits)
+
+def check_tags_and_names(names, tags):
+    def name2q(name):
+        spts = name.split(' ')
+        return {
+            "filter": {
+                "query": {
+                    "query_string": {
+                        "query": u"fname:{}~0.7 AND lname:{}~0.7".format(spts[0], spts[1])
+                    }
+                }
+            }
+        }
+    def tag2q(tag):
+        return {
+            "filter": {
+                "query": {
+                    "query_string": {
+                        "query": u"tag:%s" % tag
+                    }
+                }
+            }
+        }
+    def hits2res(name_hits):
+        name = name_hits[0]
+        hits = name_hits[1]
+        if (len(hits) > 0):
+            src = hits[0]["_source"]
+            if src["fname"] + u" " + src["lname"] == name:
+                return True
+            else:
+                return u"{} {}".format(src["fname"], src["lname"])
+        else:
+            return False
+    def tags2res(hits):
+        return len(hits) > 0
+    if len(filter(lambda x: len(x.split(' ')) != 2, names)) > 0:
+        raise ValueError("Name should consists of 2 words separated by space")
+    names_d = map(name2q, names)
+    tags_d = map(tag2q, tags)
+    names_h, tags_h = _req_hits_multi_1(zip(["names", "tags"], [names_d, tags_d]))
+    return map(hits2res, zip(names, names_h)), map(tags2res, tags_h)
+
 
 def get_tags(term):
     hits = _req_hits("tags/tag/_search?q=tag:"+term+"~0.7")

@@ -47,18 +47,18 @@ def check_names_tags(bucks):
     names_n = dict(zip(names, n))
     tags_n = dict(zip(tags, t))
     res = []
-    for buck in bucks:
+    for idx, buck in enumerate(bucks):
         name_1 = buck[0]
         name_2 = buck[1]
         link_types = buck[2]
         sim_names = [names_n[name_1], names_n[name_2]]
         if isinstance(sim_names[0], basestring):
-            res.append(ValueError(u"STR_SIMILAR_NAME:{},{}".format(name_1,sim_names[0])))
+            res.append((idx, u"STR_SIMILAR_NAME:{},{}".format(name_1,sim_names[0])))
         if isinstance(sim_names[1], basestring):
-            res.append(ValueError(u"STR_SIMILAR_NAME:{},{}".format(name_2,sim_names[1])))
+            res.append((idx, u"STR_SIMILAR_NAME:{},{}".format(name_2,sim_names[1])))
         false_tags = filter(lambda x: tags_n[x] == False, link_types)
         if len(false_tags) > 0:
-            res.append(ValueError(u"STR_TAG_NOT_FOUND:{}".format(",".join(false_tags))))
+            res.append((idx, u"STR_TAG_NOT_FOUND:{}".format(",".join(false_tags))))
     return res
 
 def parse_line(line, perv_url):

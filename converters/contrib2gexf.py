@@ -22,8 +22,8 @@ def get_attr_rel_for(rel):
         u"кореш" : "private_rel",
         u"служба" : "prof_rel",
         u"лобби" : "prof_rel",
-        u"партнер" : "prof_rel"
-
+        u"партнер" : "prof_rel",
+        u"соуч" : "prof_rel"
     }[rel];
 
 def get_xml_elements(edge_bucks, node_bucks):

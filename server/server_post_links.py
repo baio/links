@@ -18,8 +18,8 @@ def update_links(lines):
         # 4. write new layout file
         edges = list(stg.get_edges())
         nodes = list(stg.get_nodes())
-        shutil.copy("/gephi/_layout.gexf", "/gephi/layout.gexf")
-        merge_xml_elements(edges, nodes, "/gephi/layout.gexf")
+        shutil.copy("gephi/_layout.gexf", "gephi/layout.gexf")
+        merge_xml_elements(edges, nodes, "gephi/layout.gexf")
         return []
     else:
         return errs

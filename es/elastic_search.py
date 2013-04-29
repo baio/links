@@ -56,9 +56,11 @@ def get_similar_names(names):
     return map(hits2res, zip(names, hits))
 
 
+"""
 def check_tags(tags):
     for tag in tags:
         yield True if _req("tags/tag/_search?q=tag:"+tag) else False
+"""
 
 def _append(q, name_items_dict):
     r = []
@@ -83,6 +85,23 @@ def get_names(term):
 def get_names_json(term):
     res = get_names(term)
     return json.dumps(res)
+
+def check_tags(tags):
+    def tag2q(tag):
+        return {
+            "filter": {
+                "query": {
+                    "query_string": {
+                        "query": u"tag:%s" % tag
+                    }
+                }
+            }
+        }
+    def hits2res(hits):
+        return len(hits) > 0
+    q = map(tag2q, tags)
+    hits = _req_hits_multi("tags/tag/_msearch", q)
+    return map(hits2res, hits)
 
 def get_tags(term):
     hits = _req_hits("tags/tag/_search?q=tag:"+term+"~0.7")

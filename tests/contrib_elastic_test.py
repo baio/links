@@ -25,6 +25,16 @@ class TestContribElastic(unittest.TestCase):
         self.assertEquals(len(res), 1)
         self.assertEquals(res[0], True)
 
+    """
+    def test_tags_in_list_multi(self):
+        res = list(es.check_tags_multi([u"лобби", u"браат", u"двоюр"]))
+        self.assertEquals(len(res), 3)
+        self.assertEquals(res[0], True)
+        self.assertEquals(res[1], False)
+        self.assertEquals(res[2], False)
+    """
+
+
 if __name__ == '__main__':
     #es._init("data")
     unittest.main()

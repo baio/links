@@ -6,7 +6,7 @@ from es import elastic_search as es
 from server_post_links import update_links
 from server_post_gexf import upload_gexf
 
-render = web.template.render('../gephi/', cache=False)
+render = web.template.render('gephi/', cache=False)
 
 urls = [
     '/names', 'names',

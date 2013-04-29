@@ -7,20 +7,59 @@ import collections
 
 _cryllic = u'абвгдеёжзийклмнопрстуфхцчшщъыьэюяабвгдеёжзийклмнопрстуфхцчшщъыьэюя'
 
+class ES:
+
+    def __init__(self, names, tags):
+        n, t = es.check_names_and_tags(names, tags)
+        self.names = dict(zip(names, n))
+        self.tags = dict(zip(tags, t))
+
+    def check_tags(self, tags):
+        return [self.tags[tag][0] for tag in tags]
+
+    def get_similar_names(self, names):
+        return [self.names[name][0] for name in names]
+
 def parse_lines(lines):
     perv_url = None
     res = []
     errors = []
     for idx, line in enumerate(lines):
         if line:
-            line = unicode(line, "utf-8")
+            if not isinstance(line, unicode):
+                line = unicode(line, "utf-8")
             try:
                 buck = parse_line(line, perv_url)
                 perv_url = buck[3]
                 res.append(buck)
             except ValueError as e:
                 errors.append((idx, e.message))
+    if len(errors) == 0:
+        errors += check_names_tags(res)
+
     return res, errors
+
+def check_names_tags(bucks):
+    names = set([x[0] for x in bucks] + [x[1] for x in bucks])
+    #names = list(names) + [n[1] + " " + n[0] for n in map(unicode.split, names)]
+    tags = set(sum([x[2] for x in bucks], []))
+    n, t = es.check_names_and_tags(names, tags)
+    names_n = dict(zip(names, n))
+    tags_n = dict(zip(tags, t))
+    res = []
+    for buck in bucks:
+        name_1 = buck[0]
+        name_2 = buck[1]
+        link_types = buck[2]
+        sim_names = [names_n[name_1], names_n[name_2]]
+        if isinstance(sim_names[0], basestring):
+            res.append(ValueError(u"STR_SIMILAR_NAME:{},{}".format(name_1,sim_names[0])))
+        if isinstance(sim_names[1], basestring):
+            res.append(ValueError(u"STR_SIMILAR_NAME:{},{}".format(name_2,sim_names[1])))
+        false_tags = filter(lambda x: tags_n[x] == False, link_types)
+        if len(false_tags) > 0:
+            res.append(ValueError(u"STR_TAG_NOT_FOUND:{}".format(",".join(false_tags))))
+    return res
 
 def parse_line(line, perv_url):
     if not line or len(line.strip()) == 0:
@@ -66,7 +105,7 @@ def parse_line(line, perv_url):
 
         if not regex.match("http://[\w\.]+/[\w]+$", url):
             raise ValueError("STR_LINK_FORMAT")
-
+        """
         sim_names = list(es.get_similar_names([name_1, name_2]))
         if isinstance(sim_names[0], basestring):
             raise ValueError(u"STR_SIMILAR_NAME:{},{}".format(name_1,sim_names[0]))
@@ -76,6 +115,7 @@ def parse_line(line, perv_url):
         tags = filter(lambda x: not x[1], zip(link_types, es.check_tags(link_types)))
         if len(tags) != 0:
             raise ValueError(u"STR_TAG_NOT_FOUND:{}".format(",".join(map(lambda x: x[0], tags))))
+        """
 
         return (name_1, name_2, link_types, url)
     else:

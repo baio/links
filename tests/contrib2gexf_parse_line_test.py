@@ -2,7 +2,7 @@
 __author__ = 'baio'
 
 import unittest
-from converters.line2bucket import parse_line
+from converters.line2bucket import *
 
 class TestContrib2Gexf(unittest.TestCase):
 
@@ -107,20 +107,17 @@ class TestContrib2Gexf(unittest.TestCase):
             parse_line(u"елена скрынник-виктор христенко-брат.служба", "http://docs.python.org/2/library/functions.html#filter")
 
     def test_names_similarity(self):
-        try:
-            parse_line(u"илена скрынник-виктор христенко-брат.служба,http://goo.gl/ohEX4", None)
-        except ValueError as err:
-            self.assertEqual(u"STR_SIMILAR_NAME:илена скрынник,елена скрынник", err.message)
-        try:
-            parse_line(u"скрынник елена-виктор христенко-брат.служба,http://goo.gl/ohEX4", None)
-        except ValueError as err:
-            self.assertEqual(u"STR_SIMILAR_NAME:скрынник елена,елена скрынник", err.message)
+        r, errs = parse_lines([u"илена скрынник-виктор христенко-брат.служба,http://goo.gl/ohEX4"])
+        self.assertEqual(len(errs), 1)
+        self.assertEqual(u"STR_SIMILAR_NAME:илена скрынник,елена скрынник", errs[0].message)
+        #r, errs = parse_lines([u"скрынник елена-виктор христенко-брат.служба,http://goo.gl/ohEX4"])
+        #self.assertEqual(len(errs), 1)
+        #self.assertEqual(u"STR_SIMILAR_NAME:скрынник елена,елена скрынник", errs[0].message)
 
     def test_tags_not_found(self):
-        try:
-            parse_line(u"елена скрынник-виктор христенко-брат.брот,http://goo.gl/ohEX4", None)
-        except ValueError as err:
-            self.assertEqual(u"STR_TAG_NOT_FOUND:брот", err.message)
+        r, errs = parse_lines([u"елена скрынник-виктор христенко-брат.брот,http://goo.gl/ohEX4"])
+        self.assertEqual(len(errs), 1)
+        self.assertEqual(u"STR_TAG_NOT_FOUND:брот", errs[0].message)
 
     def test_format(self):
         buck = parse_line(u"елена скрынник-виктор христенко-брат.служба,http://goo.gl/ohEX4", None)

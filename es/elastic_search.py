@@ -13,13 +13,7 @@ def _req_hits(q):
     hits = yaml.load(res.content)["hits"]
     return hits["hits"] if len(hits) > 0 else []
 
-def _req_hits_multi(q, data):
-    d = "{}\n" + "{}\n".join(map(lambda x: json.dumps(x) + "\n", data))
-    res = req.get(_elastic_host_url + "/" + q, data=d)
-    content = yaml.load(res.content)
-    return map(lambda x: x["hits"]["hits"], content["responses"])
-
-def _req_hits_multi_1(index_data):
+def _req_hits_multi(index_data):
     """
     index_data - list of buckets:
     index : index/type for es request
@@ -50,41 +44,6 @@ def _req(q):
     else:
         return None
 
-def get_similar_names(names):
-    def name2q(name):
-        spts = name.split(' ')
-        return {
-            "filter": {
-                "query": {
-                    "query_string": {
-                        "query": u"fname:{}~0.7 AND lname:{}~0.7".format(spts[0], spts[1])
-                    }
-                }
-            }
-        }
-    def hits2res(name_hits):
-        name = name_hits[0]
-        hits = name_hits[1]
-        if (len(hits) > 0):
-            src = hits[0]["_source"]
-            if src["fname"] + u" " + src["lname"] == name:
-                return True
-            else:
-                return u"{} {}".format(src["fname"], src["lname"])
-        else:
-            return False
-    if len(filter(lambda x: len(x.split(' ')) != 2, names)) > 0:
-        raise ValueError("Name should consists of 2 words separated by space")
-    data = filter(None, map(name2q, names))
-    hits = _req_hits_multi("names/name/_msearch", data)
-    return map(hits2res, zip(names, hits))
-
-
-"""
-def check_tags(tags):
-    for tag in tags:
-        yield True if _req("tags/tag/_search?q=tag:"+tag) else False
-"""
 
 def _append(q, name_items_dict):
     r = []
@@ -110,24 +69,7 @@ def get_names_json(term):
     res = get_names(term)
     return json.dumps(res)
 
-def check_tags(tags):
-    def tag2q(tag):
-        return {
-            "filter": {
-                "query": {
-                    "query_string": {
-                        "query": u"tag:%s" % tag
-                    }
-                }
-            }
-        }
-    def hits2res(hits):
-        return len(hits) > 0
-    q = map(tag2q, tags)
-    hits = _req_hits_multi("tags/tag/_msearch", q)
-    return map(hits2res, hits)
-
-def check_tags_and_names(names, tags):
+def check_names_and_tags(names, tags):
     def name2q(name):
         spts = name.split(' ')
         return {
@@ -149,7 +91,7 @@ def check_tags_and_names(names, tags):
                 }
             }
         }
-    def hits2res(name_hits):
+    def names2res(name_hits):
         name = name_hits[0]
         hits = name_hits[1]
         if (len(hits) > 0):
@@ -166,8 +108,8 @@ def check_tags_and_names(names, tags):
         raise ValueError("Name should consists of 2 words separated by space")
     names_d = map(name2q, names)
     tags_d = map(tag2q, tags)
-    names_h, tags_h = _req_hits_multi_1(zip(["names", "tags"], [names_d, tags_d]))
-    return map(hits2res, zip(names, names_h)), map(tags2res, tags_h)
+    names_h, tags_h = _req_hits_multi(zip(["names", "tags"], [names_d, tags_d]))
+    return map(names2res, zip(names, names_h)), map(tags2res, tags_h)
 
 
 def get_tags(term):

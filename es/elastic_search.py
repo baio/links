@@ -52,10 +52,30 @@ def _append(q, name_items_dict):
         r.append(res.json()["ok"])
     return r
 
+def _append_multi(index_data):
+    """
+    index_data - list of buckets:
+    index : index/type for es request
+    data : [insert_item]
+    """
+    def data2idx(idx, data):
+        return u"{}\n{}\n".format(
+            json.dumps({"index" : {"_index" : idx.split("/")[0], "_type" : idx.split("/")[1]}}),
+            json.dumps(data)
+        )
+
+    index_data = filter(lambda x: len(x[1]) > 0, index_data)
+    d = "".join(map(lambda x: u"".join(
+                    map(lambda y: data2idx(x[0], y), x[1]))
+        , index_data))
+    res = req.post(_elastic_host_url + "/_bulk", data=d)
+    content = yaml.load(res.content)
+    return map(lambda x: x["create"]["ok"], content["items"])
+
 
 def append_names(names):
     ns = map(lambda x: {"fname" : x.split(' ')[0], "lname" : x.split(' ')[1]}, names)
-    return _append("names/name/", dict(zip(names, ns)))
+    return _append_multi(zip(["names/name"], [ns]))
 
 def append_tags(tags):
     ts = map(lambda x: {"tag" : x}, tags)

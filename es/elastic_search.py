@@ -56,12 +56,13 @@ def _append_multi(index_data):
     """
     index_data - list of buckets:
     index : index/type for es request
-    data : [insert_item]
+    data : [(id, insert_item)]
     """
     def data2idx(idx, data):
+        spts = idx.split("/")
         return u"{}\n{}\n".format(
-            json.dumps({"index" : {"_index" : idx.split("/")[0], "_type" : idx.split("/")[1]}}),
-            json.dumps(data)
+            json.dumps({"index" : {"_index" : spts[0], "_type" : spts[1], "_id" : data[0]}}),
+            json.dumps(data[1])
         )
 
     index_data = filter(lambda x: len(x[1]) > 0, index_data)
@@ -70,12 +71,13 @@ def _append_multi(index_data):
         , index_data))
     res = req.post(_elastic_host_url + "/_bulk", data=d)
     content = yaml.load(res.content)
-    return map(lambda x: x["create"]["ok"], content["items"])
+    return map(lambda x: x["index"]["ok"], content["items"])
 
 
 def append_names(names):
     ns = map(lambda x: {"fname" : x.split(' ')[0], "lname" : x.split(' ')[1]}, names)
-    return _append_multi(zip(["names/name"], [ns]))
+    ids = map(lambda x: u"{}_{}".format(x["fname"], x["lname"]), ns)
+    return _append_multi(zip(["names/name"], [zip(ids, ns)]))
 
 def append_tags(tags):
     ts = map(lambda x: {"tag" : x}, tags)

@@ -28,6 +28,8 @@
 
         graphs : [
 
+            name : ""
+
             nodes : [
 
                 _id : "lname_fname"
@@ -37,7 +39,7 @@
 
             edges : [
 
-                name : "lname1_fname1_lname2_fname2"
+                _id : "lname1_fname1_lname2_fname2"
 
                 tags : [ tag : "type", urls : [ "url" ] ]
             ]

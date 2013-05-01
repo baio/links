@@ -76,7 +76,9 @@ def merge_xml_elements(edge_bucks, node_bucks, merge_xml):
         xml_nodes.append(node)
     for edge in edges:
         xml_edges.append(edge)
-    xml.write(merge_xml, "utf-8", xml_declaration=True)
+    if merge_xml:
+        xml.write(merge_xml, "utf-8", xml_declaration=True)
+    return ET.dump(xml)
 
 
 

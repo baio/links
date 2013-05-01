@@ -3,8 +3,8 @@ __author__ = 'baio'
 import web
 import simplejson as json
 from es import elastic_search as es
-from server_post_gexf import upload_gexf
-from update_contrib import update_contrib
+from dom.user.get_gexf import get_gexf
+from update_contrib import *
 
 render = web.template.render('gephi/', cache=False)
 
@@ -21,11 +21,10 @@ app = web.application(urls, globals())
 class gexf:
 
     def GET(self):
-        print "gexf download"
         web.header('Access-Control-Allow-Origin','*')
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/xml')
-        return render.layout()
+        return get_gexf("baio", "gov-ru")
 
     def POST(self):
         print "gexf uload"
@@ -34,7 +33,7 @@ class gexf:
         web.header('Content-Type', 'application/json')
         x = web.input(gexf_file={})
         xml = x['gexf_file'].file.read()
-        upload_gexf(xml)
+        update_contrib_from_gexf(xml)
         return json.dumps({"ok" : True})
 
 class names:
@@ -59,7 +58,7 @@ class contribs:
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/json')
         lines = web.data().split('\n')
-        errs  = update_contrib("baio", "gov-ru", lines)
+        errs  = update_contrib_from_lines("baio", "gov-ru", lines)
         if len(errs) ==  0:
             return json.dumps({"ok" : True})
         else:

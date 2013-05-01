@@ -48,8 +48,8 @@ def convert_dom2gexf(dom_nodes, dom_edges):
     for edge in dom_edges:
         edge_el = ET.Element("edge")
         spts = edge["_id"].split("_")
-        edge_el.attrib["source"] = spts[0] + " " + spts[1]
-        edge_el.attrib["target"] = spts[2] + " " + spts[3]
+        edge_el.attrib["source"] = spts[0] + "_" + spts[1]
+        edge_el.attrib["target"] = spts[2] + "_" + spts[3]
         attrs_el = ET.Element("attvalues")
         edge_el.append(attrs_el)
         urls = []

@@ -33,7 +33,7 @@ class gexf:
         web.header('Content-Type', 'application/json')
         x = web.input(gexf_file={})
         xml = x['gexf_file'].file.read()
-        update_contrib_from_gexf(xml)
+        update_contrib_from_gexf("baio", "gov-ru", xml)
         return json.dumps({"ok" : True})
 
 class names:

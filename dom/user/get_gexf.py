@@ -9,4 +9,4 @@ def get_gexf(user_name, graph_name):
     fs = gridfs.GridFS(db)
     file_name = u"{}_{}.gexf".format(user_name, graph_name)
     with fs.get_last_version(filename=file_name) as fp:
-        return fp.readall()
+        return fp.read()

@@ -3,15 +3,15 @@ __author__ = 'baio'
 import web
 import simplejson as json
 from es import elastic_search as es
-from server_post_links import update_links
 from server_post_gexf import upload_gexf
+from update_contrib import update_contrib
 
 render = web.template.render('gephi/', cache=False)
 
 urls = [
     '/names', 'names',
     '/tags', 'tags',
-    '/links', 'links',
+    '/contribs', 'contribs',
     '/gexf', 'gexf'
 ]
 
@@ -52,15 +52,14 @@ class tags:
         web.header('Content-Type', 'application/json')
         return es.get_tags_json(web.input().term)
 
-class links:
+class contribs:
 
     def POST(self):
         web.header('Access-Control-Allow-Origin','*')
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/json')
         lines = web.data().split('\n')
-        print lines
-        errs  = update_links(lines)
+        errs  = update_contrib("baio", "gov-ru", lines)
         if len(errs) ==  0:
             return json.dumps({"ok" : True})
         else:

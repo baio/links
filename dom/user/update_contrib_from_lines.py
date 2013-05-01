@@ -5,9 +5,11 @@ import pymongo as mongo
 import datetime as dt
 from config.config import config
 
-def upload_lines(user_name, contrib_name, lines):
+def update_contrib_from_lines(user_name, contrib_name, lines):
 
     bucks, errs = parse_lines(lines)
+
+    if len(errs) > 0: return errs
 
     now = dt.datetime.now()
 
@@ -26,16 +28,16 @@ def upload_lines(user_name, contrib_name, lines):
 
     data = map(lambda x: {"name_1" : x[0], "name_2" : x[1], "tags" : x[2], "url" : x[3]}, bucks)
 
-    "find and replace items in data, or create new"
+    """find and replace items in data, or create new"""
     for d in data:
 
-        "ordering names"
+        """ordering names"""
         if d["name_1"] > d["name_2"]:
             dd = d["name_1"]
             d["name_1"] = d["name_2"]
             d["name_2"] = dd
 
-        "find same names in collection"
+        """find same names in collection"""
         i = filter(lambda x: x["name_1"] == d["name_1"] and x["name_2"] == d["name_2"], contrib["data"])
         if len(i) > 0:
             contrib["data"].remove(i[0])
@@ -48,7 +50,9 @@ def upload_lines(user_name, contrib_name, lines):
         db.user.insert(user)
     else:
         if "contribs" in user:
-            "modifying old contrib"
+            """modifying old contrib"""
             db.user.update({"_id": user_name, "contribs.name" : contrib_name}, {"$set" :  {"contribs.$" : contrib}})
         else:
             db.user.update({"_id": user_name}, {"$push" : { "contribs" :  contrib}})
+
+    return []

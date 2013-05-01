@@ -1,10 +1,10 @@
-__author__ = 'max'
+__author__ = 'baio'
 from storage import mongo_storage as stg
 from converters.gexf2nodes import get_nodes
 from converters.contrib2gexf import merge_xml_elements
 import shutil
 
-def upload_gexf(gexf_xml):
+def update_gexf(xml):
     nodes = get_nodes(gexf_xml)
     stg.store_nodes(nodes)
     # 4. write new layout file

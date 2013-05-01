@@ -1,21 +1,21 @@
 # -*- coding: utf-8 -*-
 __author__ = 'baio'
-
-import pymongo as mongo
-import gridfs
-from config.config import config
 import xml.etree.ElementTree as ET
 
-def get_elements(edge_bucks, node_bucks):
-    nodes = []
-    for name in set([x[0] for x in edge_bucks] + [x[1] for x in edge_bucks]):
-        pos = [-1,-1]
-        node_buck = filter(lambda x: x[0] == name.replace(" ", "_"), node_bucks)
-        if len(node_buck) > 0: pos = node_buck[0][1]
-        nodes.append((name, pos))
-    return edge_bucks, nodes
+def get_nodes_from_gexf(xml):
+    xml_root = ET.fromstring(xml)
+    def ns_tag(tag):
+        return str(ET.QName('http://www.gexf.net/1.2draft', tag) )
+    def viz_tag(tag):
+        return str(ET.QName('http://www.gexf.net/1.2draft/viz', tag) )
+    ET.register_namespace("", "http://www.gexf.net/1.2draft")
+    ET.register_namespace("viz", "http://www.gexf.net/1.2draft/viz")
+    xml_nodes = xml_root.find(ns_tag("graph")).find(ns_tag("nodes"))
+    for node in xml_nodes:
+        pos = node.find(viz_tag("position"))
+        yield (node.get("id"), [float(pos.get("x")), float(pos.get("y"))])
 
-def get_attr_rel_for(rel):
+def _get_attr_rel_for(rel):
     return {
         u"брат" : "family_rel",
         u"муж" : "family_rel",
@@ -30,12 +30,12 @@ def get_attr_rel_for(rel):
         u"соуч" : "prof_rel"
     }[rel];
 
-def get_xml_elements(nodes, edges):
+def convert_dom2gexf(dom_nodes, dom_edges):
     def viz_tag(tag):
         return str(ET.QName('http://www.gexf.net/1.2draft/viz', tag) )
     node_els = []
     edge_els = []
-    for node in nodes:
+    for node in dom_nodes:
         node_el = ET.Element("node")
         node_el.attrib["id"] = node["_id"]
         node_el.attrib["label"] = node["_id"].replace("_"," ")
@@ -45,7 +45,7 @@ def get_xml_elements(nodes, edges):
             attr_pos.attrib["x"] = str(node["pos"][0])
             attr_pos.attrib["y"] = str(node["pos"][1])
         node_els.append(node_el)
-    for edge in edges:
+    for edge in dom_edges:
         edge_el = ET.Element("edge")
         spts = edge["_id"].split("_")
         edge_el.attrib["source"] = spts[0] + " " + spts[1]
@@ -56,7 +56,7 @@ def get_xml_elements(nodes, edges):
         for tag in edge["tags"]:
             attr_val_el = ET.Element("attvalue")
             attrs_el.append(attr_val_el)
-            attr_val_el.attrib["for"] = get_attr_rel_for(tag["name"])
+            attr_val_el.attrib["for"] = _get_attr_rel_for(tag["name"])
             attr_val_el.attrib["value"] = tag["name"]
             urls.append(",".join(tag["urls"]))
         attr_val_el = ET.Element("attvalue")
@@ -66,10 +66,10 @@ def get_xml_elements(nodes, edges):
         edge_els.append(edge_el)
     return edge_els, node_els
 
-def _get_xml(nodes, edges):
+def get_gexf_from_dom(dom_nodes, dom_edges):
     def ns_tag(tag):
         return str(ET.QName('http://www.gexf.net/1.2draft', tag) )
-    edges, nodes  = get_xml_elements(nodes, edges)
+    edges, nodes  = convert_dom2gexf(dom_nodes, dom_edges)
     ET.register_namespace("", "http://www.gexf.net/1.2draft")
     ET.register_namespace("viz", "http://www.gexf.net/1.2draft/viz")
     parser = ET.XMLParser(encoding="utf-8")
@@ -82,28 +82,4 @@ def _get_xml(nodes, edges):
     for edge in edges:
         xml_edges.append(edge)
     return ET.tostring(xml_root)
-
-
-
-def graph2gexf(user_name, graph_name):
-
-    client = mongo.MongoClient(config["MONGO_URI"])
-    db = client.links
-    user = db.user.find_one({"_id": user_name, "graphs.name" : graph_name}, {"graphs" : 1})
-
-    xml = _get_xml(user["graphs"][0]["nodes"], user["graphs"][0]["edges"])
-    fs = gridfs.GridFS(db)
-    file_name = u"{}_{}.gexf".format(user_name, graph_name)
-    file_id = None
-    if fs.exists(filename=file_name):
-        with fs.get_last_version(filename=file_name) as fp:
-            file_id = fp._id
-    with fs.new_file(filename=file_name, content_type="text/xml") as fp:
-        fp.write(xml)
-    if file_id:
-        fs.delete(file_id)
-
-
-
-
 

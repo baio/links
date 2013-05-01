@@ -5,7 +5,7 @@ import pymongo as mongo
 import datetime as dt
 from config.config import config
 
-def upload(user_name, contrib_name, lines):
+def upload_lines(user_name, contrib_name, lines):
 
     bucks, errs = parse_lines(lines)
 

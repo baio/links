@@ -4,19 +4,19 @@ import pymongo as mongo
 import datetime as dt
 from config.config import config
 
-def compile_graph(user, contrib_names, graph_name):
+def compile_graph(user_name, contrib_names, graph_name):
 
     now = dt.datetime.now()
 
     client = mongo.MongoClient(config["MONGO_URI"])
     db = client.links
 
-    user = db.user.find_one({"_id": user}, {
+    user = db.user.find_one({"_id": user_name}, {
         "contribs" : { "$elemMatch" : {"name" : {"$in" : contrib_names}}},
         "graphs" : { "$elemMatch" : {"name" : graph_name}}
     })
 
-    if "graph" in user:
+    if "graphs" in user:
         graph = user["graphs"][0]
     else:
         graph = {"name" : graph_name, "date" : now, "nodes" : [], "edges" : []}
@@ -24,7 +24,7 @@ def compile_graph(user, contrib_names, graph_name):
     old_nodes = graph["nodes"]
     graph["nodes"] = []
     graph["edges"] = []
-    data = sum(sum(user["contribs"], []), [])
+    data = sum(map(lambda x: x["data"], user["contribs"]), [])
     nodes = dict()
     edges = dict()
 
@@ -34,7 +34,7 @@ def compile_graph(user, contrib_names, graph_name):
         old_node = filter(lambda x: x["_id"] == node["_id"], old_nodes)
         if len(old_node) > 0 and "pos" in old_node[0]:
             node["pos"] = old_node[0]["pos"]
-        node
+        return node
 
     for d in data:
         node_1 = create_node(d["name_1"])
@@ -42,9 +42,9 @@ def compile_graph(user, contrib_names, graph_name):
         nodes[node_1["_id"]] = node_1
         nodes[node_2["_id"]] = node_2
 
-        edge_id = "{}_{}".format(node_1["_id"], node_2["_id"])
+        edge_id = u"{}_{}".format(node_1["_id"], node_2["_id"])
         edge = edges.get(edge_id, {"_id": edge_id, "tags": []})
-        edges["edge_id"] = edge
+        edges[edge_id] = edge
         for tag in d["tags"]:
             edge_tag = filter(lambda x: x["name"] == tag, edge["tags"])
             if len(edge_tag):
@@ -60,4 +60,9 @@ def compile_graph(user, contrib_names, graph_name):
     for edge in edges:
         graph["edges"].append(edges[edge])
 
-    db.user.update({"_id" : user, "gaphs.name" : graph_name}, {"$set" :  {"graphs.$" : graph}})
+    if "graphs" in user:
+        db.user.update({"_id" : user_name, "gaphs.name" : graph_name}, {"$set" :  {"graphs.$" : graph}})
+    else:
+        db.user.update({"_id" : user_name}, {"$push" :  {"graphs" : graph}})
+
+    client.disconnect()

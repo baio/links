@@ -18,14 +18,15 @@ class TestDomUser(unittest.TestCase):
         update_contrib_from_lines("baio2", "my-own", [u"елена скрынник-виктор христенко-брат.служба,http://goo.gl/ohEX4"])
 
 
-    @unittest.skip("demonstrating skipping")
+
     def test_compile(self):
-        compile_graph("baio", ["my-own"], "grp1")
+        compile_graph("baio", ["gov-ru"], "gov-ru")
 
     @unittest.skip("demonstrating skipping")
     def test_graph2gexf(self):
         update_gexf_from_graph("baio", "grp1")
 
+    @unittest.skip("demonstrating skipping")
     def test_update_contrib_from_gexf(self):
         print "test"
         with open("gephi/layout.gexf") as f:

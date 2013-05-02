@@ -43,8 +43,10 @@ def compile_graph(user_name, contrib_names, graph_name):
         nodes[node_2["_id"]] = node_2
 
         edge_id = u"{}_{}".format(node_1["_id"], node_2["_id"])
-        edge = edges.get(edge_id, {"_id": edge_id, "tags": []})
-        edges[edge_id] = edge
+        edge = edges.get(edge_id, None)
+        if edge is None:
+            edge = {"_id": edge_id, "tags": []}
+            edges[edge_id] = edge
         for tag in d["tags"]:
             edge_tag = filter(lambda x: x["name"] == tag, edge["tags"])
             if len(edge_tag):
@@ -61,8 +63,7 @@ def compile_graph(user_name, contrib_names, graph_name):
         graph["edges"].append(edges[edge])
 
     if "graphs" in user:
-        db.user.update({"_id" : user_name, "gaphs.name" : graph_name}, {"$set" :  {"graphs.$" : graph}})
+        graph["date"] = now
+        db.user.update({"_id" : user_name, "graphs.name" : graph_name}, {"$set" :  {"graphs.$" : graph}})
     else:
         db.user.update({"_id" : user_name}, {"$push" :  {"graphs" : graph}})
-
-    client.disconnect()

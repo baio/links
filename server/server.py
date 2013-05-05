@@ -4,7 +4,10 @@ import web
 import simplejson as json
 from es import elastic_search as es
 from dom.user.get_gexf import get_gexf
+from dom.user.get_contrib import get_contrib
 from update_contrib import *
+import datetime as dt
+
 
 render = web.template.render('gephi/', cache=False)
 
@@ -52,6 +55,16 @@ class tags:
         return es.get_tags_json(web.input().term)
 
 class contribs:
+
+    def GET(self):
+        web.header('Access-Control-Allow-Origin','*')
+        web.header('Access-Control-Allow-Credentials','true')
+        web.header('Content-Type', 'application/json')
+        def date_handler(obj):
+            return obj.isoformat() if hasattr(obj, 'isoformat') else obj
+        d = get_contrib("baio", "gov-ru")
+        return json.dumps(d, default=date_handler)
+
 
     def POST(self):
         web.header('Access-Control-Allow-Origin','*')

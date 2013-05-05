@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 __author__ = 'baio'
 import xml.etree.ElementTree as ET
+import tag2rel_type
 
 def get_elements(edge_bucks, node_bucks):
     nodes = []
@@ -11,20 +12,6 @@ def get_elements(edge_bucks, node_bucks):
         nodes.append((name, pos))
     return edge_bucks, nodes
 
-def get_attr_rel_for(rel):
-    return {
-        u"брат" : "family_rel",
-        u"муж" : "family_rel",
-        u"двоюрод" : "family_rel",
-        u"замуж" : "family_rel",
-        u"сын" : "family_rel",
-        u"друг" : "private_rel",
-        u"кореш" : "private_rel",
-        u"служба" : "prof_rel",
-        u"лобби" : "prof_rel",
-        u"партнер" : "prof_rel",
-        u"соуч" : "prof_rel"
-    }[rel];
 
 def get_xml_elements(edge_bucks, node_bucks):
     def viz_tag(tag):
@@ -51,7 +38,7 @@ def get_xml_elements(edge_bucks, node_bucks):
         for rel in edge[2]:
             attr_val_el = ET.Element("attvalue")
             attrs_el.append(attr_val_el)
-            attr_val_el.attrib["for"] = get_attr_rel_for(rel)
+            attr_val_el.attrib["for"] = tag2rel_type.tag2rel_type(rel)
             attr_val_el.attrib["value"] = rel
         attr_val_el = ET.Element("attvalue")
         attrs_el.append(attr_val_el)

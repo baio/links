@@ -70,8 +70,12 @@ class contribs:
         web.header('Access-Control-Allow-Origin','*')
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/json')
+        data = json.loads(web.data())
+        errs = update_contrib_from_json("baio", data)
+        """
         lines = web.data().split('\n')
         errs  = update_contrib_from_lines("baio", "gov-ru", lines)
+        """
         if len(errs) ==  0:
             return json.dumps({"ok" : True})
         else:

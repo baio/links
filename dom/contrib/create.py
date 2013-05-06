@@ -8,11 +8,12 @@ from config.config import config
 def create(user_name, contrib_name, url):
     """create new contrib for the user"""
     client = mongo.MongoClient(config["MONGO_URI"])
-    db = client.links
+    db = client[config["MONGO_DB"]]
     now = dt.datetime.now()
 
-    contrib = {"name": contrib_name, "date": now, "url": url}
+    ref = db.contribs.insert({})
+    contrib = {"name": contrib_name, "date": now, "url": url, "ref": str(ref)}
 
-    db.user.update({"_id": user_name}, {"$push" : { "contribs" :  contrib}})
-    db.contribs.insert({"_id": user_name+"_"+contrib_name})
+    db.users.update({"_id": user_name}, {"$push" : { "contribs" :  contrib}})
+
 

@@ -1,6 +1,7 @@
 __author__ = 'baio'
 
 import pymongo as mongo
+from  bson.objectid import ObjectId
 from config.config import config
 
 def _json2dom(item):
@@ -8,7 +9,7 @@ def _json2dom(item):
     if item["_id"] is not None:
         dom["_id"] = item["_id"]
     else:
-        dom["_id"] = item["name_1"] + "_" + item["name_2"]
+        dom["_id"] = ObjectId()
     dom["tags"] = []
     rel = item.get("family_rel", None)
     if rel is not None: dom["tags"].append({"name": rel, "type": "family"})
@@ -21,7 +22,10 @@ def _json2dom(item):
 def merge(user_name, contrib_name, data):
     """append/modify/delete items in contrib"""
     client = mongo.MongoClient(config["MONGO_URI"])
-    db = client.links
+    db = client[config["MONGO_DB"]]
+    contrib_ref = db.users.find_one({"_id": user_name, "contribs.name": contrib_name},
+                                    {"contribs.$.ref" : 1})["contribs"][0]["ref"]
+    contrib_ref = ObjectId(contrib_ref)
 
     crt_items = []
     for item in filter(lambda x: x["_id"] is None, data):
@@ -35,18 +39,23 @@ def merge(user_name, contrib_name, data):
 
     rm_ids = []
     for item in filter(lambda x: "_remove" in x, data):
-        rm_ids[item["_id"]]
+        rm_ids.append(ObjectId(item["_id"]))
+
+    res = map(lambda x: {"id": x["_id"], "errs": [], "warns": []}, crt_items)
 
     if len(crt_items) > 0:
-        db.contribs.update({"_id": user_name +"_"+ contrib_name}, {"$pushAll" : {"items" : crt_items}})
+        db.contribs.update({"_id": contrib_ref}, {"$pushAll" : {"items" : crt_items}})
+
 
     if len(upd_items) > 0:
         for upd_item in upd_items:
-            db.contribs.update({"_id": user_name +"_"+ contrib_name, "items._id": upd_item["_id"]}, {"$set": {"items.$" : upd_item}})
-    #Waiting for the miracle to come, https://jira.mongodb.org/browse/SERVER-831
-    #cnt = db.user.find({"_id": user_name, "contribs.name": contrib_name}, {"contribs.$.data": {"$elemMatch": {"_id" : "name_1_name_3"}}})
+            db.contribs.update({"_id": contrib_ref, "items._id": upd_item["_id"]}, {"$set": {"items.$" : upd_item}})
+
+        #Waiting for the miracle to come, https://jira.mongodb.org/browse/SERVER-831
+        #cnt = db.user.find({"_id": user_name, "contribs.name": contrib_name}, {"contribs.$.data": {"$elemMatch": {"_id" : "name_1_name_3"}}})
 
     if len(rm_ids) > 0:
-        db.contribs.remove({"_id": {"$in" : rm_ids}})
+        db.contribs.update({"_id" : contrib_ref},
+                            {"$pull": {"items" : {"_id" : {"$in" : rm_ids}}}})
 
-
+    return res

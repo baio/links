@@ -4,10 +4,10 @@ import web
 import simplejson as json
 from es import elastic_search as es
 from dom.user.get_gexf import get_gexf
-from dom.user.get_contrib import get_contrib
-from update_contrib import *
-import datetime as dt
 
+from dom import contrib
+from dom.user.get import get as user_get
+from dom.contrib.create import create as contrib_create
 
 render = web.template.render('gephi/', cache=False)
 
@@ -15,6 +15,7 @@ urls = [
     '/names', 'names',
     '/tags', 'tags',
     '/contribs', 'contribs',
+    '/users', 'users',
     '/gexf', 'gexf'
 ]
 
@@ -54,6 +55,15 @@ class tags:
         web.header('Content-Type', 'application/json')
         return es.get_tags_json(web.input().term)
 
+class users:
+
+    def GET(self):
+        web.header('Access-Control-Allow-Origin','*')
+        web.header('Access-Control-Allow-Credentials','true')
+        web.header('Content-Type', 'application/json')
+        return json.dumps(user_get("baio"))
+
+
 class contribs:
 
     def GET(self):
@@ -62,25 +72,32 @@ class contribs:
         web.header('Content-Type', 'application/json')
         def date_handler(obj):
             return obj.isoformat() if hasattr(obj, 'isoformat') else obj
-        d = get_contrib("baio", "gov-ru")
+        d = contrib.get.get("baio", "gov-ru")
         return json.dumps(d, default=date_handler)
-
 
     def POST(self):
         web.header('Access-Control-Allow-Origin','*')
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/json')
         data = json.loads(web.data())
-        errs = update_contrib_from_json("baio", data)
-        """
-        lines = web.data().split('\n')
-        errs  = update_contrib_from_lines("baio", "gov-ru", lines)
-        """
-        if len(errs) ==  0:
-            return json.dumps({"ok" : True})
-        else:
-            e = map(lambda x: {"line": x[0], "code" : x[1]}, errs)
-            return json.dumps({"errors" : e})
+        contrib_create("baio", data["name"], data["url"])
+        return json.dumps({"ok" : True})
+
+    def PUT(self):
+        web.header('Access-Control-Allow-Origin','*')
+        web.header('Access-Control-Allow-Credentials','true')
+        web.header('Content-Type', 'application/json')
+        data = json.loads(web.data())
+        contrib.get.update("baio", data["name"], data["new_name"], data["new_url"])
+        return json.dumps({"ok" : True})
+
+    def MERGE(self):
+        web.header('Access-Control-Allow-Origin','*')
+        web.header('Access-Control-Allow-Credentials','true')
+        web.header('Content-Type', 'application/json')
+        data = json.loads(web.data())
+        contrib.get.merge("baio", data["name"], data["data"])
+        return json.dumps({"ok" : True})
 
 if __name__ == "__main__":
     app.run()

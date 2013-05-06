@@ -3,8 +3,8 @@ import os
 
 def _dev_config():
     return {
-        "MONGO_URI" : "mongodb://adm:123@ds039447.mongolab.com:39447/links",
-        "MONGO_DB" : "knit_test",
+        "MONGO_URI" : "mongodb://adm:123@ds059957.mongolab.com:59957/knit",
+        "MONGO_DB" : "knit",
         "ES_URI" : "http://ec8a279a8973c6f31c23e87e5c5a2f46-us-east-1.foundcluster.com:9200"
     }
 
@@ -23,8 +23,8 @@ def _product_config():
     }
 
 config = {
-        "production": _product_config,
+        "dev": _dev_config,
         "test": _test_config,
         "product": _product_config
-    }[os.getenv("ENV", None)]()
+    }[os.getenv("ENV", "dev")]()
 

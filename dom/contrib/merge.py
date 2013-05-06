@@ -4,6 +4,22 @@ import pymongo as mongo
 from  bson.objectid import ObjectId
 from config.config import config
 
+def _prepare(data):
+    for item in data:
+        if "name_1" in item and item["name_2"] > item["name_1"]:
+            n = item["name_2"]
+            item["name_2"] = item["name_1"]
+            item["name_1"] = n
+
+def _validate(data):
+    #names not empty
+    #names consists of 2 words
+    #one of the rel exists
+    #existsent rel not empty
+    #es similar names
+    #es similar rels
+    return [{"errs": [], "warns": []}] * len(data)
+
 def _json2dom(item):
     dom = {"name_1": item["name_1"], "name_2": item["name_2"]}
     if item["_id"] is not None:
@@ -20,6 +36,8 @@ def _json2dom(item):
     return dom
 
 def merge(user_name, contrib_name, data):
+    _prepare(data)
+    _validate(data)
     """append/modify/delete items in contrib"""
     client = mongo.MongoClient(config["MONGO_URI"])
     db = client[config["MONGO_DB"]]
@@ -45,7 +63,6 @@ def merge(user_name, contrib_name, data):
 
     if len(crt_items) > 0:
         db.contribs.update({"_id": contrib_ref}, {"$pushAll" : {"items" : crt_items}})
-
 
     if len(upd_items) > 0:
         for upd_item in upd_items:

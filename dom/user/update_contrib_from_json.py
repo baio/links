@@ -25,12 +25,14 @@ def update_contrib_from_json(user_name, data):
     else:
         contrib = user["contribs"][0]
 
+    data = contrib["data"]
+
     def _map_item(item):
         tags = filter(lambda x: x is not None, [item.get("family_rel", None),
                 item.get("prof_rel", None),
                 item.get("private_rel", None)])
         return {"name_1" : item["name_1"], "name_2" : item["name_2"], "tags" : tags, "url" : contrib_url}
-    data = map(_map_item, data["data"])
+    data = map(_map_item, data)
 
     """find and replace items in data, or create new"""
     for d in data:
@@ -42,11 +44,14 @@ def update_contrib_from_json(user_name, data):
             d["name_2"] = dd
 
         """find same names in collection"""
-        i = filter(lambda x: x["name_1"] == d["name_1"] and x["name_2"] == d["name_2"], contrib["data"])
-        if len(i) > 0:
-            contrib["data"].remove(i[0])
+        i = filter(lambda x: x["name_1"] == d["name_1"] and x["name_2"] == d["name_2"], data)
 
-        contrib["data"].append(d)
+        if len(i) > 0:
+            data.remove(i[0])
+
+        data.append(d)
+
+    contrib["data"] = data
 
     #upsert
     if "_id" in user:

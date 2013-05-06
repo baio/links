@@ -61,8 +61,9 @@ class users:
         web.header('Access-Control-Allow-Origin','*')
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/json')
-        return json.dumps(user_get("baio"))
-
+        def date_handler(obj):
+            return obj.isoformat() if hasattr(obj, 'isoformat') else obj
+        return json.dumps(user_get("baio"), default=date_handler)
 
 class contribs:
 

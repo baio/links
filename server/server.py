@@ -9,6 +9,7 @@ from dom import contrib
 from dom.user.get import get as user_get
 from dom.contrib.create import create as contrib_create
 from dom.contrib.get import get as contrib_get
+from dom.contrib.merge import merge as contrib_merge
 
 render = web.template.render('gephi/', cache=False)
 
@@ -73,7 +74,10 @@ class contribs:
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/json')
         def date_handler(obj):
-            return obj.isoformat() if hasattr(obj, 'isoformat') else obj
+            if hasattr(obj, 'isoformat'):
+                obj.isoformat()
+            else:
+                raise TypeError("Unserializable object {} of type {}".format(obj, type(obj)))
         d = contrib_get("baio", web.input()["id"])
         return json.dumps(d, default=date_handler)
 
@@ -85,6 +89,12 @@ class contribs:
         contrib_create("baio", data["name"], data["url"])
         return json.dumps({"ok" : True})
 
+    def OPTIONS(self):
+        web.header('Access-Control-Allow-Origin','*')
+        web.header('Access-Control-Allow-Credentials','true')
+        web.header('Content-Type', 'application/json')
+        web.header('Access-Control-Allow-Methods', 'POST, GET, PUT, PATCH')
+
     def PUT(self):
         web.header('Access-Control-Allow-Origin','*')
         web.header('Access-Control-Allow-Credentials','true')
@@ -93,12 +103,12 @@ class contribs:
         contrib.get.update("baio", data["name"], data["new_name"], data["new_url"])
         return json.dumps({"ok" : True})
 
-    def MERGE(self):
+    def PATCH(self):
         web.header('Access-Control-Allow-Origin','*')
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/json')
         data = json.loads(web.data())
-        contrib.get.merge("baio", data["name"], data["data"])
+        contrib_merge("baio", data["id"], data["items"])
         return json.dumps({"ok" : True})
 
 if __name__ == "__main__":

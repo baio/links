@@ -10,6 +10,11 @@ def get(user_name, contrib_ref):
     contrib_ref = db.contribs.find_one({"_id" : ObjectId(contrib_ref)})
     contrib = user["contribs"][0]
     contrib["items"] = contrib_ref.get("items", [])
+    for item in contrib["items"]:
+        item["_id"] = str(item["_id"])
+        for tag in item["tags"]:
+            item["{}_rel".format(tag["type"])] = tag["name"]
+        del item["tags"]
     return contrib
 
 

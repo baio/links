@@ -23,7 +23,7 @@ def _validate(data):
 def _json2dom(item):
     dom = {"name_1": item["name_1"], "name_2": item["name_2"]}
     if item["_id"] is not None:
-        dom["_id"] = item["_id"]
+        dom["_id"] = ObjectId(item["_id"])
     else:
         dom["_id"] = ObjectId()
     dom["tags"] = []
@@ -35,15 +35,17 @@ def _json2dom(item):
     if rel is not None: dom["tags"].append({"name": rel, "type": "private"})
     return dom
 
-def merge(user_name, contrib_name, data):
+def merge(user_name, contrib_id, data):
     _prepare(data)
     _validate(data)
     """append/modify/delete items in contrib"""
     client = mongo.MongoClient(config["MONGO_URI"])
     db = client[config["MONGO_DB"]]
+    """
     contrib_ref = db.users.find_one({"_id": user_name, "contribs.name": contrib_name},
                                     {"contribs.$.ref" : 1})["contribs"][0]["ref"]
-    contrib_ref = ObjectId(contrib_ref)
+    """
+    contrib_ref = ObjectId(contrib_id)
 
     crt_items = []
     for item in filter(lambda x: x["_id"] is None, data):

@@ -8,6 +8,7 @@ from dom.user.get_gexf import get_gexf
 from dom import contrib
 from dom.user.get import get as user_get
 from dom.contrib.create import create as contrib_create
+from dom.contrib.get import get as contrib_get
 
 render = web.template.render('gephi/', cache=False)
 
@@ -73,7 +74,7 @@ class contribs:
         web.header('Content-Type', 'application/json')
         def date_handler(obj):
             return obj.isoformat() if hasattr(obj, 'isoformat') else obj
-        d = contrib.get.get("baio", "gov-ru")
+        d = contrib_get("baio", web.input()["id"])
         return json.dumps(d, default=date_handler)
 
     def POST(self):

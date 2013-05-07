@@ -3,13 +3,13 @@ import pymongo as mongo
 from config.config import config
 from  bson.objectid import ObjectId
 
-def get(user_name, contrib_name):
+def get(user_name, contrib_ref):
     client = mongo.MongoClient(config["MONGO_URI"])
-    db = client[config["MONGO_URI"]]
-    contrib_ref = db.users.find_one({"_id": user_name, "contribs.name": contrib_name},
-                                    {"contribs.$.ref" : 1})["contribs"][0]["ref"]
-    contrib_ref = ObjectId(contrib_ref)
-    contrib = db.contribs.find_one({"_id" : contrib_ref})
+    db = client[config["MONGO_DB"]]
+    user = db.users.find_one({"_id": user_name, "contribs.ref": contrib_ref}, {"contribs.$.ref" : 1})
+    contrib_ref = db.contribs.find_one({"_id" : ObjectId(contrib_ref)})
+    contrib = user["contribs"][0]
+    contrib["items"] = contrib_ref.get("items", [])
     return contrib
 
 

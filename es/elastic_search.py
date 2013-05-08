@@ -141,7 +141,7 @@ def check_names_and_tags(names, tags):
 
 
 def get_tags(type, term):
-    hits = _req_hits("tags/tag/_search?q=(name:{0}~0.7 OR name:*{0}*) AND type:{1}".format(term, type))
+    hits = _req_hits(u"tags/tag/_search?q=(name:{0}~0.7 OR name:*{0}*) AND type:{1}".format(term, type))
     return map(lambda x: {"key": x["_id"], "val": x["_source"]["name"]}, hits)
 
 def get_tags_json(type, term):

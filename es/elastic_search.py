@@ -90,8 +90,12 @@ def append_names_tags(names, tags):
     return _append_multi(data)
 
 def get_names(term):
-    hits = _req_hits(u"names/name/_search?q=lname:{0}~0.7 OR fname:{0}~0.7 OR lname:*{0}* OR fname:*{0}*".format(term))
-    return map(lambda x: {"key": x["_id"], "val": u"{} {}".format(x["_source"]["fname"], x["_source"]["lname"])}, hits)
+    if term:
+        term = term.strip()
+        if term:
+            hits = _req_hits(u"names/name/_search?q=lname:{0}~0.7 OR fname:{0}~0.7 OR lname:*{0}* OR fname:*{0}*".format(term))
+            return map(lambda x: {"key": x["_id"], "val": u"{} {}".format(x["_source"]["fname"], x["_source"]["lname"])}, hits)
+    return []
 
 def get_names_json(term):
     res = get_names(term)
@@ -141,8 +145,13 @@ def check_names_and_tags(names, tags):
 
 
 def get_tags(type, term):
-    hits = _req_hits(u"tags/tag/_search?q=(name:{0}~0.7 OR name:*{0}*) AND type:{1}".format(term, type))
-    return map(lambda x: {"key": x["_id"], "val": x["_source"]["name"]}, hits)
+    if type and term:
+        type = type.strip()
+        term = term.strip()
+        if type and term:
+            hits = _req_hits(u"tags/tag/_search?q=(name:{0}~0.7 OR name:*{0}*) AND type:{1}".format(term, type))
+            return map(lambda x: {"key": x["_id"], "val": x["_source"]["name"]}, hits)
+    return []
 
 def get_tags_json(type, term):
     res = get_tags(type, term)

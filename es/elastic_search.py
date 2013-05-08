@@ -80,12 +80,18 @@ def append_names(names):
     return _append_multi(zip(["names/name"], [zip(ids, ns)]))
 
 def append_tags(tags):
-    ts = map(lambda x: {"tag" : x}, tags)
-    return _append("tags/tag/", dict(zip(tags, ts)))
+    ids = map(lambda x: x["name"], tags)
+    return _append_multi(zip(["tags/tag"], [zip(ids, tags)]))
+
+def append_names_tags(names, tags):
+    name_ids = map(lambda x: u"{}_{}".format(x["fname"], x["lname"]), names)
+    tag_ids = map(lambda x: x["name"], tags)
+    data = [("names/name", zip(name_ids, names))] + [("tags/tag", zip(tag_ids, tags))]
+    return _append_multi(data)
 
 def get_names(term):
-    hits = _req_hits("names/name/_search?q=lname:"+term+"~0.7")
-    return map(lambda x: {"key": x["_id"], "val": x["_source"]["name"]}, hits)
+    hits = _req_hits(u"names/name/_search?q=lname:{0}~0.7 OR fname:{0}~0.7 OR lname:*{0}* OR fname:*{0}*".format(term))
+    return map(lambda x: {"key": x["_id"], "val": u"{} {}".format(x["_source"]["fname"], x["_source"]["lname"])}, hits)
 
 def get_names_json(term):
     res = get_names(term)
@@ -134,12 +140,12 @@ def check_names_and_tags(names, tags):
     return map(names2res, zip(names, names_h)), map(tags2res, tags_h)
 
 
-def get_tags(term):
-    hits = _req_hits("tags/tag/_search?q=tag:"+term+"~0.7")
+def get_tags(type, term):
+    hits = _req_hits("tags/tag/_search?q=(tag:{0}~0.7 OR tag:*{0}*) AND type:{1}".format(term, type))
     return map(lambda x: {"key": x["_id"], "val": x["_source"]["tag"]}, hits)
 
-def get_tags_json(term):
-    res = get_tags(term)
+def get_tags_json(type, term):
+    res = get_tags(type, term)
     return json.dumps(res)
 
 

@@ -9,7 +9,7 @@ from dom import contrib
 from dom.user.get import get as user_get
 from dom.contrib.create import create as contrib_create
 from dom.contrib.get import get as contrib_get
-from dom.contrib.merge import merge as contrib_merge
+from contrib_patch import contrib_patch
 
 render = web.template.render('gephi/', cache=False)
 
@@ -55,7 +55,7 @@ class tags:
         web.header('Access-Control-Allow-Origin','*')
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/json')
-        return es.get_tags_json(web.input().term)
+        return es.get_tags_json(web.input().type, web.input().term)
 
 class users:
 
@@ -108,8 +108,8 @@ class contribs:
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/json')
         data = json.loads(web.data())
-        contrib_merge("baio", data["id"], data["items"])
-        return json.dumps({"ok" : True})
+        res = contrib_patch("baio", data["id"], data["items"])
+        return json.dumps(res)
 
 if __name__ == "__main__":
     app.run()

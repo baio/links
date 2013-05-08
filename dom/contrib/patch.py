@@ -35,33 +35,31 @@ def _json2dom(item):
     if rel is not None: dom["tags"].append({"name": rel, "type": "private"})
     return dom
 
-def merge(user_name, contrib_id, data):
+def patch(user_name, contrib_id, data):
     _prepare(data)
     _validate(data)
     """append/modify/delete items in contrib"""
     client = mongo.MongoClient(config["MONGO_URI"])
     db = client[config["MONGO_DB"]]
-    """
-    contrib_ref = db.users.find_one({"_id": user_name, "contribs.name": contrib_name},
-                                    {"contribs.$.ref" : 1})["contribs"][0]["ref"]
-    """
     contrib_ref = ObjectId(contrib_id)
 
+    res = map(lambda x: {"_id": x["_id"], "err": [], "warn": []}, data)
+
     crt_items = []
-    for item in filter(lambda x: x["_id"] is None, data):
-        dom = _json2dom(item)
-        crt_items.append(dom)
+    for i, item in enumerate(data):
+        if item["_id"] is None:
+            dom = _json2dom(item)
+            crt_items.append(dom)
+            res[i]["_id"] = str(dom["_id"])
 
     upd_items = []
-    for item in filter(lambda x: x["_id"] is not None and "_remove" not in x, data):
+    for item in filter(lambda x: x["_id"] is not None and ("_isRemoved" not in x or not x["_isRemoved"]), data):
         dom = _json2dom(item)
         upd_items.append(dom)
 
     rm_ids = []
-    for item in filter(lambda x: "_remove" in x, data):
+    for item in filter(lambda x: "_isRemoved" in x and x["_isRemoved"], data):
         rm_ids.append(ObjectId(item["_id"]))
-
-    res = map(lambda x: {"id": x["_id"], "errs": [], "warns": []}, crt_items)
 
     if len(crt_items) > 0:
         db.contribs.update({"_id": contrib_ref}, {"$pushAll" : {"items" : crt_items}})

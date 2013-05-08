@@ -6,6 +6,12 @@ from es import elastic_search as es
 
 class TestContribElastic(unittest.TestCase):
 
+    def test_names_tags_append(self):
+        names = [{"fname": "fname_2", "lname": "lname_2"}, {"fname": "fname_1", "lname": "lname_1"}]
+        tags = [{"name": "name_1", "type": "type_1"}, {"name": "name_2", "type": "type_2"}]
+        es.append_names_tags(names, tags)
+
+    @unittest.skip("demonstrating skipping")
     def test_names_append(self):
         res = es.append_names([u"виктор харитонин"])
         self.assertEquals(len(res), 1)

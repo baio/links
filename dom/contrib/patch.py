@@ -4,13 +4,6 @@ import pymongo as mongo
 from  bson.objectid import ObjectId
 from config.config import config
 
-def _prepare(data):
-    for item in data:
-        if "name_1" in item and item["name_2"] > item["name_1"]:
-            n = item["name_2"]
-            item["name_2"] = item["name_1"]
-            item["name_1"] = n
-
 def _validate(data):
     #names not empty
     #names consists of 2 words
@@ -36,7 +29,6 @@ def _json2dom(item):
     return dom
 
 def patch(user_name, contrib_id, data):
-    _prepare(data)
     _validate(data)
     """append/modify/delete items in contrib"""
     client = mongo.MongoClient(config["MONGO_URI"])

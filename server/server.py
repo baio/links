@@ -23,6 +23,14 @@ urls = [
 
 app = web.application(urls, globals())
 
+def _jsonforammter(obj):
+    return obj.isoformat() if hasattr(obj, 'isoformat') else obj
+    """
+    if hasattr(obj, 'isoformat'):
+        obj.isoformat()
+    else:
+        raise TypeError("Unserializable object {} of type {}".format(obj, type(obj)))
+    """
 
 class gexf:
 
@@ -63,9 +71,11 @@ class users:
         web.header('Access-Control-Allow-Origin','*')
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/json')
+        """
         def date_handler(obj):
             return obj.isoformat() if hasattr(obj, 'isoformat') else obj
-        return json.dumps(user_get("baio"), default=date_handler)
+        """
+        return json.dumps(user_get("baio"), default=_jsonforammter)
 
 class contribs:
 
@@ -73,13 +83,8 @@ class contribs:
         web.header('Access-Control-Allow-Origin','*')
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/json')
-        def date_handler(obj):
-            if hasattr(obj, 'isoformat'):
-                obj.isoformat()
-            else:
-                raise TypeError("Unserializable object {} of type {}".format(obj, type(obj)))
         d = contrib_get("baio", web.input()["id"])
-        return json.dumps(d, default=date_handler)
+        return json.dumps(d, default=_jsonforammter)
 
     def POST(self):
         web.header('Access-Control-Allow-Origin','*')

@@ -1,13 +1,14 @@
 __author__ = 'baio'
 
 import pymongo as mongo
-import datetime as dt
+from  bson.objectid import ObjectId
 from config.config import config
 
-def delete(user_name, contrib_name):
+def delete(user_name, contrib_id):
     """delete contrib for the user"""
     client = mongo.MongoClient(config["MONGO_URI"])
-    db = client.links
+    db = client[config["MONGO_DB"]]
 
-    db.user.remove({"user": user_name, "name": contrib_name})
+    db.users.update({"_id": user_name}, {"$pull" : {"contribs" : {"ref" : contrib_id}} })
+    db.contribs.remove({"_id" : ObjectId(contrib_id)})
 

@@ -9,6 +9,7 @@ from dom import contrib
 from dom.user.get import get as user_get
 from dom.contrib.create import create as contrib_create
 from dom.contrib.get import get as contrib_get
+from dom.contrib.delete import delete as contrib_delete
 from contrib_patch import contrib_patch
 
 render = web.template.render('gephi/', cache=False)
@@ -25,12 +26,6 @@ app = web.application(urls, globals())
 
 def _jsonforammter(obj):
     return obj.isoformat() if hasattr(obj, 'isoformat') else obj
-    """
-    if hasattr(obj, 'isoformat'):
-        obj.isoformat()
-    else:
-        raise TypeError("Unserializable object {} of type {}".format(obj, type(obj)))
-    """
 
 class gexf:
 
@@ -71,10 +66,6 @@ class users:
         web.header('Access-Control-Allow-Origin','*')
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/json')
-        """
-        def date_handler(obj):
-            return obj.isoformat() if hasattr(obj, 'isoformat') else obj
-        """
         return json.dumps(user_get("baio"), default=_jsonforammter)
 
 class contribs:
@@ -98,7 +89,7 @@ class contribs:
         web.header('Access-Control-Allow-Origin','*')
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/json')
-        web.header('Access-Control-Allow-Methods', 'POST, GET, PUT, PATCH')
+        web.header('Access-Control-Allow-Methods', 'POST, GET, PUT, PATCH, DELETE')
 
     def PUT(self):
         web.header('Access-Control-Allow-Origin','*')
@@ -115,6 +106,15 @@ class contribs:
         data = json.loads(web.data())
         res = contrib_patch("baio", data["id"], data["items"])
         return json.dumps(res)
+
+    def DELETE(self):
+        web.header('Access-Control-Allow-Origin','*')
+        web.header('Access-Control-Allow-Credentials','true')
+        web.header('Content-Type', 'application/json')
+        data = json.loads(web.data())
+        contrib_delete("baio", data["ref"])
+        return json.dumps({"ok" : True})
+
 
 if __name__ == "__main__":
     app.run()

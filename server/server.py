@@ -10,6 +10,7 @@ from dom.user.get import get as user_get
 from dom.contrib.create import create as contrib_create
 from dom.contrib.get import get as contrib_get
 from dom.contrib.delete import delete as contrib_delete
+from dom.contrib.update import update as contrib_update
 from contrib_patch import contrib_patch
 
 render = web.template.render('gephi/', cache=False)
@@ -96,8 +97,8 @@ class contribs:
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/json')
         data = json.loads(web.data())
-        contrib.get.update("baio", data["name"], data["new_name"], data["new_url"])
-        return json.dumps({"ok" : True})
+        d = contrib_update("baio", data["ref"], data["name"], data["url"])
+        return json.dumps(d, default=_jsonforammter)
 
     def PATCH(self):
         web.header('Access-Control-Allow-Origin','*')

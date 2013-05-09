@@ -16,4 +16,6 @@ def create(user_name, contrib_name, url):
 
     db.users.update({"_id": user_name}, {"$push" : { "contribs" :  contrib}})
 
+    return contrib
+
 

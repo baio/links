@@ -82,8 +82,8 @@ class contribs:
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/json')
         data = json.loads(web.data())
-        contrib_create("baio", data["name"], data["url"])
-        return json.dumps({"ok" : True})
+        d = contrib_create("baio", data["name"], data["url"])
+        return json.dumps(d, default=_jsonforammter)
 
     def OPTIONS(self):
         web.header('Access-Control-Allow-Origin','*')

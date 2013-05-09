@@ -3,15 +3,14 @@ __author__ = 'baio'
 import web
 import simplejson as json
 from es import elastic_search as es
-from dom.user.get_gexf import get_gexf
 
-from dom import contrib
 from dom.user.get import get as user_get
 from dom.contrib.create import create as contrib_create
 from dom.contrib.get import get as contrib_get
 from dom.contrib.delete import delete as contrib_delete
 from dom.contrib.update import update as contrib_update
 from contrib_patch import contrib_patch
+from dom.graph.get import get_contrib as get_graph_contrib
 
 render = web.template.render('gephi/', cache=False)
 
@@ -20,7 +19,7 @@ urls = [
     '/tags', 'tags',
     '/contribs', 'contribs',
     '/users', 'users',
-    '/gexf', 'gexf'
+    '/graphs', 'graphs'
 ]
 
 app = web.application(urls, globals())
@@ -28,6 +27,17 @@ app = web.application(urls, globals())
 def _jsonforammter(obj):
     return obj.isoformat() if hasattr(obj, 'isoformat') else obj
 
+
+class graphs:
+
+    def GET(self):
+        web.header('Access-Control-Allow-Origin','*')
+        web.header('Access-Control-Allow-Credentials','true')
+        web.header('Content-Type', 'application/json')
+        d = get_graph_contrib("baio", web.input().contrib)
+        return json.dumps(d, default=_jsonforammter)
+
+"""
 class gexf:
 
     def GET(self):
@@ -45,6 +55,7 @@ class gexf:
         xml = x['gexf_file'].file.read()
         update_contrib_from_gexf("baio", "gov-ru", xml)
         return json.dumps({"ok" : True})
+"""
 
 class names:
 

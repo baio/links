@@ -19,7 +19,7 @@ def get_contrib(user_name, contrib_id):
     def map_node(node_name):
         pos = [-1, -1]
         if nodes_meta:
-            node_meta = filter(lambda x: x["name"] == node_name,  nodes_meta)
+            node_meta = filter(lambda x: x["id"] == node_name,  nodes_meta)
             if len(node_meta) > 0:
                 pos = node_meta["pos"]
         return {"id": node_name, "name": node_name, "meta" : {"pos" : pos}}

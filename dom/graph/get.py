@@ -53,5 +53,5 @@ def get_contrib(user_name, contrib_id):
         for tag in edge["tags"]:
             tag["url"] = url
 
-    return {"name": contrib_name, "nodes": nodes.values(), "edges": edges.values()}
+    return {"id": contrib_id, "name": contrib_name, "nodes": nodes.values(), "edges": edges.values()}
 

@@ -21,7 +21,7 @@ def get_contrib(user_name, contrib_id):
         if nodes_meta:
             node_meta = filter(lambda x: x["id"] == node_name,  nodes_meta)
             if len(node_meta) > 0:
-                pos = node_meta["pos"]
+                pos = node_meta[0]["pos"]
         return {"id": node_name, "name": node_name, "meta" : {"pos" : pos}}
     for item in items:
         node_name_1 = node_name = item["name_1"]

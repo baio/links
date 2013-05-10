@@ -5,11 +5,18 @@ import pymongo as mongo
 from config.config import config
 from  bson.objectid import ObjectId
 
+def _get_default_contrib_id():
+    return "518b989739ed9714289d0bc1"
+
 
 def get_contrib(user_name, contrib_id):
+    if not contrib_id:
+        contrib_id = _get_default_contrib_id()
     client = mongo.MongoClient(config["MONGO_URI"])
     db = client[config["MONGO_DB"]]
-    url = db.users.find_one({"_id": user_name, "contribs.ref": contrib_id}, {"contribs.$.url" : 1})["contribs"][0]["url"]
+    user_contrib = db.users.find_one({"_id": user_name, "contribs.ref": contrib_id}, {"contribs.$" : 1})["contribs"]
+    url = user_contrib[0]["url"]
+    contrib_name = user_contrib[0]["name"]
     contrib = db.contribs.find_one({"_id" : ObjectId(contrib_id)})
     contrib_meta = db.contribs.meta.find_one({"_id" : ObjectId(contrib_id)})
     nodes = dict()
@@ -46,5 +53,5 @@ def get_contrib(user_name, contrib_id):
         for tag in edge["tags"]:
             tag["url"] = url
 
-    return {"nodes": nodes.values(), "edges": edges.values()}
+    return {"name": contrib_name, "nodes": nodes.values(), "edges": edges.values()}
 

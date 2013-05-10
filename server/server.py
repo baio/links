@@ -35,7 +35,9 @@ class graphs:
         web.header('Access-Control-Allow-Origin','*')
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/json')
-        d = get_graph_contrib("baio", web.input().contrib)
+        input = web.input()
+        contrib = input.contrib if "contrib" in input else None
+        d = get_graph_contrib("baio", contrib)
         return json.dumps(d, default=_jsonforammter)
 
     def POST(self):

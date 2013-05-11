@@ -21,11 +21,11 @@ def _json2dom(item):
         dom["_id"] = ObjectId()
     dom["tags"] = []
     rel = item.get("family_rel", None)
-    if rel is not None: dom["tags"].append({"name": rel, "type": "family"})
+    if rel: dom["tags"].append({"name": rel, "type": "family"})
     rel = item.get("prof_rel", None)
-    if rel is not None: dom["tags"].append({"name": rel, "type": "prof"})
+    if rel: dom["tags"].append({"name": rel, "type": "prof"})
     rel = item.get("private_rel", None)
-    if rel is not None: dom["tags"].append({"name": rel, "type": "private"})
+    if rel: dom["tags"].append({"name": rel, "type": "private"})
     return dom
 
 def patch(user_name, contrib_id, data):

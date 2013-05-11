@@ -11,7 +11,7 @@ from dom.contrib.delete import delete as contrib_delete
 from dom.contrib.update import update as contrib_update
 from contrib_patch import contrib_patch
 from dom.graph.get import get as get_graph
-from dom.graph.post import post_contrib as post_graph_contrib
+from dom.graph.post import post as post_graph
 
 render = web.template.render('gephi/', cache=False)
 
@@ -45,7 +45,7 @@ class graphs:
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/json')
         input = json.loads(web.data())
-        post_graph_contrib(input["contrib"], input["data"])
+        post_graph(input["graph"], input["data"])
         return json.dumps({"ok": True}, default=_jsonforammter)
 
 """

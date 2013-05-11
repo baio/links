@@ -10,7 +10,7 @@ from dom.contrib.get import get as contrib_get
 from dom.contrib.delete import delete as contrib_delete
 from dom.contrib.update import update as contrib_update
 from contrib_patch import contrib_patch
-from dom.graph.get import get_contrib as get_graph_contrib
+from dom.graph.get import get as get_graph
 from dom.graph.post import post_contrib as post_graph_contrib
 
 render = web.template.render('gephi/', cache=False)
@@ -36,8 +36,8 @@ class graphs:
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/json')
         input = web.input()
-        contrib = input.contrib if "contrib" in input else None
-        d = get_graph_contrib("baio", contrib)
+        graph = input.graph if "graph" in input else None
+        d = get_graph("baio", graph)
         return json.dumps(d, default=_jsonforammter)
 
     def POST(self):

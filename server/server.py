@@ -11,6 +11,7 @@ from dom.contrib.delete import delete as contrib_delete
 from dom.contrib.update import update as contrib_update
 from contrib_patch import contrib_patch
 from dom.graph.get import get as get_graph
+from dom.graph.patch import patch as patch_graph
 from dom.graph.post import post as post_graph
 
 render = web.template.render('gephi/', cache=False)
@@ -28,8 +29,13 @@ app = web.application(urls, globals())
 def _jsonforammter(obj):
     return obj.isoformat() if hasattr(obj, 'isoformat') else obj
 
-
 class graphs:
+
+    def OPTIONS(self):
+        web.header('Access-Control-Allow-Origin','*')
+        web.header('Access-Control-Allow-Credentials','true')
+        web.header('Content-Type', 'application/json')
+        web.header('Access-Control-Allow-Methods', 'POST, GET, PUT, PATCH, DELETE')
 
     def GET(self):
         web.header('Access-Control-Allow-Origin','*')
@@ -40,33 +46,21 @@ class graphs:
         d = get_graph("baio", graph)
         return json.dumps(d, default=_jsonforammter)
 
+    def PATCH(self):
+        web.header('Access-Control-Allow-Origin','*')
+        web.header('Access-Control-Allow-Credentials','true')
+        web.header('Content-Type', 'application/json')
+        input = json.loads(web.data())
+        patch_graph(input["graph"], input["data"])
+        return json.dumps({"ok": True}, default=_jsonforammter)
+
     def POST(self):
         web.header('Access-Control-Allow-Origin','*')
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/json')
         input = json.loads(web.data())
-        post_graph(input["graph"], input["data"])
-        return json.dumps({"ok": True}, default=_jsonforammter)
-
-"""
-class gexf:
-
-    def GET(self):
-        web.header('Access-Control-Allow-Origin','*')
-        web.header('Access-Control-Allow-Credentials','true')
-        web.header('Content-Type', 'application/xml')
-        return get_gexf("baio", "gov-ru")
-
-    def POST(self):
-        print "gexf uload"
-        web.header('Access-Control-Allow-Origin','*')
-        web.header('Access-Control-Allow-Credentials','true')
-        web.header('Content-Type', 'application/json')
-        x = web.input(gexf_file={})
-        xml = x['gexf_file'].file.read()
-        update_contrib_from_gexf("baio", "gov-ru", xml)
-        return json.dumps({"ok" : True})
-"""
+        d = post_graph("baio", input["name"], input["contribs"])
+        return json.dumps(d, default=_jsonforammter)
 
 class names:
 

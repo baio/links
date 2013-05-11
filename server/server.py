@@ -13,6 +13,8 @@ from contrib_patch import contrib_patch
 from dom.graph.get import get as get_graph
 from dom.graph.patch import patch as patch_graph
 from dom.graph.post import post as post_graph
+from dom.graph.put import put as put_graph
+from dom.graph.delete import delete as delete_graph
 
 render = web.template.render('gephi/', cache=False)
 
@@ -61,6 +63,22 @@ class graphs:
         input = json.loads(web.data())
         d = post_graph("baio", input["name"], input["contribs"])
         return json.dumps(d, default=_jsonforammter)
+
+    def PUT(self):
+        web.header('Access-Control-Allow-Origin','*')
+        web.header('Access-Control-Allow-Credentials','true')
+        web.header('Content-Type', 'application/json')
+        input = json.loads(web.data())
+        d = put_graph("baio", input["id"], input["name"], input["contribs"])
+        return json.dumps(d, default=_jsonforammter)
+
+    def DELETE(self):
+        web.header('Access-Control-Allow-Origin','*')
+        web.header('Access-Control-Allow-Credentials','true')
+        web.header('Content-Type', 'application/json')
+        input = json.loads(web.data())
+        id = delete_graph("baio", input["ref"])
+        return json.dumps({"ok" : True})
 
 class names:
 

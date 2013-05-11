@@ -45,20 +45,24 @@ def get(user_name, graph_id):
                 node_name_1 = node_name_2
                 node_name_2 = s
             edge_name = node_name_1 + " " + node_name_2
+            if edge_name == u'татьяна голикова виктор христенко':
+               pass
             if  edge_name in edges:
                 edge = edges[edge_name]
-                for tag in item["tags"]:
-                    f_tags = filter(lambda x: tag["type"] == x["type"] and tag["name"] == x["name"], edge["tags"])
-                edge["tags"] += f_tags
+                for item_tag in item["tags"]:
+                    edge_tag = filter(lambda x: x["name"] == item_tag["name"] and x["type"] == item_tag["type"], edge["tags"])
+                    if len(edge_tag) > 0:
+                        edge_tag = edge_tag[0]
+                        if contrib_url not in edge_tag["urls"]:
+                            edge_tag["urls"].append(contrib_url)
+                    else:
+                        item_tag["urls"] = [contrib_url]
+                        edge["tags"].append(item_tag)
+
             else:
                 edge = {"id": edge_name, "source_id": node_name_1, "target_id": node_name_2, "tags" : item["tags"]}
+                for tag in edge["tags"]: tag["urls"] = [contrib_url]
                 edges[edge_name] = edge
-            for tag in edge["tags"]:
-                if "urls" in tag:
-                    if contrib_url not in tag["urls"]:
-                        tag["urls"].append(contrib_url)
-                else:
-                    tag["urls"] = [contrib_url]
 
     return {"id": graph_id, "name": graph_name, "nodes": nodes.values(), "edges": edges.values()}
 

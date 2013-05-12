@@ -28,6 +28,10 @@ urls = [
 
 app = web.application(urls, globals())
 
+def _getUser(input):
+    user_name = web.input().get("user", None)
+    return user_name if user_name else "twitter@baio1980"
+
 def _jsonforammter(obj):
     return obj.isoformat() if hasattr(obj, 'isoformat') else obj
 
@@ -45,7 +49,8 @@ class graphs:
         web.header('Content-Type', 'application/json')
         input = web.input()
         graph = input.graph if "graph" in input else None
-        d = get_graph("baio", graph)
+        user_name = _getUser(input)
+        d = get_graph(user_name, graph)
         return json.dumps(d, default=_jsonforammter)
 
     def PATCH(self):
@@ -101,7 +106,12 @@ class users:
         web.header('Access-Control-Allow-Origin','*')
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/json')
-        return json.dumps(user_get("baio"), default=_jsonforammter)
+        defUser = web.input().get("user", None)
+        user_name = _getUser(web.input())
+        d = user_get(user_name)
+        if not defUser:
+            d["name"] = None
+        return json.dumps(d, default=_jsonforammter)
 
 class contribs:
 
@@ -109,7 +119,7 @@ class contribs:
         web.header('Access-Control-Allow-Origin','*')
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/json')
-        d = contrib_get("baio", web.input()["id"])
+        d = contrib_get(web.input()["user"], web.input()["id"])
         return json.dumps(d, default=_jsonforammter)
 
     def POST(self):
@@ -117,7 +127,7 @@ class contribs:
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/json')
         data = json.loads(web.data())
-        d = contrib_create("baio", data["name"], data["url"])
+        d = contrib_create(data["user"], data["name"], data["url"])
         return json.dumps(d, default=_jsonforammter)
 
     def OPTIONS(self):
@@ -131,7 +141,7 @@ class contribs:
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/json')
         data = json.loads(web.data())
-        d = contrib_update("baio", data["ref"], data["name"], data["url"])
+        d = contrib_update(data["user"], data["ref"], data["name"], data["url"])
         return json.dumps(d, default=_jsonforammter)
 
     def PATCH(self):
@@ -139,7 +149,7 @@ class contribs:
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/json')
         data = json.loads(web.data())
-        res = contrib_patch("baio", data["id"], data["items"])
+        res = contrib_patch(data["user"], data["id"], data["items"])
         return json.dumps(res)
 
     def DELETE(self):
@@ -147,7 +157,7 @@ class contribs:
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/json')
         data = json.loads(web.data())
-        contrib_delete("baio", data["ref"])
+        contrib_delete(data["user"], data["ref"])
         return json.dumps({"ok" : True})
 
 

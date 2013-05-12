@@ -25,6 +25,6 @@ def _product_config():
 config = {
         "dev": _dev_config,
         "test": _test_config,
-        "product": _product_config
+        "production": _product_config
     }[os.getenv("ENV", "dev")]()
 

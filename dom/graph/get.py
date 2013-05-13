@@ -7,16 +7,25 @@ from  bson.objectid import ObjectId
 
 def _get_default_contrib_id():
     return "518b989739ed9714289d0bc1"
-def _get_default_graph_id():
-    return "518b989739ed9714289d0bc1"
+def _get_default_graph():
+    return "twitter@baio1980", "518b989739ed9714289d0bc1"
 
 def get(user_name, graph_id):
-    if not graph_id:
-        graph_id = _get_default_graph_id()
+    if not user_name and not graph_id:
+        user_name, graph_id = _get_default_graph()
     client = mongo.MongoClient(config["MONGO_URI"])
     db = client[config["MONGO_DB"]]
     user = db.users.find_one({"_id": user_name})
-    user_graph = filter(lambda x: x["ref"] == graph_id, user["graphs"])[0]
+    if user_name and not graph_id:
+        if len(user["graphs"]) > 0:
+            user_graph = user["graphs"][0]
+            graph_id = user_graph["ref"]
+        else:
+            user_name, graph_id = _get_default_graph()
+            user = db.users.find_one({"_id": user_name})
+            user_graph = filter(lambda x: x["ref"] == graph_id, user["graphs"])[0]
+    else:
+        user_graph = filter(lambda x: x["ref"] == graph_id, user["graphs"])[0]
     graph_name = user_graph["name"]
     graph_meta = db.graphs.meta.find_one({"_id" : ObjectId(graph_id)})
     nodes_meta = graph_meta["nodes"] if graph_meta else None

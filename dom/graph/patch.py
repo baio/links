@@ -4,12 +4,12 @@ __author__ = 'baio'
 import pymongo as mongo
 from config.config import config
 from  bson.objectid import ObjectId
-
-
-def patch(graph_id, nodes):
+def patch(user_name, graph_id, nodes):
+    #TODO: check user ownn graph
     client = mongo.MongoClient(config["MONGO_URI"])
     db = client[config["MONGO_DB"]]
-    contrib_meta = db.graphs.meta.find_one({"_id" : ObjectId(graph_id)})
+    if db.users.find_one({"_id": user_name, "graphs.ref": graph_id}, {"_id" : 1}) is None:
+        return 401
     def map_node_meta(node):
         return {"id": node["id"], "pos" : node["meta"]["pos"]}
     nodes_meta = map(map_node_meta, nodes)
@@ -19,4 +19,5 @@ def patch(graph_id, nodes):
             db.graphs.meta.update({"_id": ObjectId(graph_id)}, {"$push" : {"nodes": meta}},upsert=True)
         else:
             db.graphs.meta.update({"_id": ObjectId(graph_id), "nodes.id": meta["id"]}, {"$set" : {"nodes.$": meta}})
+    return 200
 

@@ -48,9 +48,9 @@ class graphs:
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/json')
         input = web.input()
-        graph = input.graph if "graph" in input else None
-        user_name = _getUser(input)
-        d = get_graph(user_name, graph)
+        graph_ref = input.get("graph", None)
+        user_name = input.get("user", None)
+        d = get_graph(user_name, graph_ref)
         return json.dumps(d, default=_jsonforammter)
 
     def PATCH(self):
@@ -58,15 +58,20 @@ class graphs:
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/json')
         input = json.loads(web.data())
-        patch_graph(input["graph"], input["data"])
-        return json.dumps({"ok": True}, default=_jsonforammter)
+        res = patch_graph(input["user"], input["graph"], input["data"])
+        if res == 200:
+            return json.dumps({"ok": True}, default=_jsonforammter)
+        elif res == 401:
+            raise web.unauthorized()
+        else:
+            raise web.internalerror()
 
     def POST(self):
         web.header('Access-Control-Allow-Origin','*')
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/json')
         input = json.loads(web.data())
-        d = post_graph("baio", input["name"], input["contribs"])
+        d = post_graph(input["user"], input["name"], input["contribs"])
         return json.dumps(d, default=_jsonforammter)
 
     def PUT(self):
@@ -74,7 +79,7 @@ class graphs:
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/json')
         input = json.loads(web.data())
-        d = put_graph("baio", input["id"], input["name"], input["contribs"])
+        d = put_graph(input["user"], input["id"], input["name"], input["contribs"])
         return json.dumps(d, default=_jsonforammter)
 
     def DELETE(self):

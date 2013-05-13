@@ -15,6 +15,8 @@ from dom.graph.patch import patch as patch_graph
 from dom.graph.post import post as post_graph
 from dom.graph.put import put as put_graph
 from dom.graph.delete import delete as delete_graph
+from dom.push.post import post as post_push
+from dom.push.put import put as put_push
 
 render = web.template.render('gephi/', cache=False)
 
@@ -23,7 +25,8 @@ urls = [
     '/tags', 'tags',
     '/contribs', 'contribs',
     '/users', 'users',
-    '/graphs', 'graphs'
+    '/graphs', 'graphs',
+    '/pushes', 'pushes',
 ]
 
 app = web.application(urls, globals())
@@ -34,6 +37,24 @@ def _getUser(input):
 
 def _jsonforammter(obj):
     return obj.isoformat() if hasattr(obj, 'isoformat') else obj
+
+class pushes:
+
+    def POST(self):
+        web.header('Access-Control-Allow-Origin','*')
+        web.header('Access-Control-Allow-Credentials','true')
+        web.header('Content-Type', 'application/json')
+        input = json.loads(web.data())
+        d = post_push(input["user"], input["graph_ref"], input["push_user"], input["push_graph"])
+        return json.dumps({"ok": True}, default=_jsonforammter)
+
+    def PUT(self):
+        web.header('Access-Control-Allow-Origin','*')
+        web.header('Access-Control-Allow-Credentials','true')
+        web.header('Content-Type', 'application/json')
+        input = json.loads(web.data())
+        d = put_push(input["user"], input["graph_ref"], input["push_user"], input["status"])
+        return json.dumps({"ok": True}, default=_jsonforammter)
 
 class graphs:
 

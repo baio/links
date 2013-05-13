@@ -10,5 +10,6 @@ def delete(user_name, contrib_id):
     db = client[config["MONGO_DB"]]
 
     db.users.update({"_id": user_name}, {"$pull" : {"contribs" : {"ref" : contrib_id}} })
+    db.users.update({"_id": user_name}, {"$pull" : {"graphs" : {"contribs" : contrib_id}} })
     db.contribs.remove({"_id" : ObjectId(contrib_id)})
 

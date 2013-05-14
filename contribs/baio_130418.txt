@@ -38,5 +38,9 @@
 
 
 
+#http://docs.mongodb.org/manual/tutorial/backup-databases-with-binary-database-dumps/
+mongodump -h ds059957.mongolab.com:59957 -u adm -p 123 -d knit -o c:/bkp/knit/mongo/0509
+mongorestore -h ds059957.mongolab.com:59957 -u adm -p 123 -d knit --drop --noIndexRestore c:/bkp/knit/mongo/0511_2/knit
 
+ db.contribs.update({"items.tags.name": ""}, {"$pull": {"items.$.tags" : {name:""}}}, {"multi": true})
 

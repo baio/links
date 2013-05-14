@@ -19,6 +19,7 @@ from dom.graph.delete import delete as delete_graph
 from dom.push.post import post as post_push
 from dom.push.put import put as put_push
 from dom.curUser.get import get as curUser_get
+from dom.contrib.get_all import get as contrib_get_all
 
 render = web.template.render('gephi/', cache=False)
 
@@ -162,7 +163,13 @@ class contribs:
         web.header('Access-Control-Allow-Origin','*')
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/json')
-        d = contrib_get(web.input()["user"], web.input()["id"])
+        input = web.input()
+        user = input["user"]
+        contrib_id = input.get("id", None)
+        if contrib_id:
+            d = contrib_get(user, contrib_id)
+        else:
+            d = contrib_get_all(user)
         return json.dumps(d, default=_jsonforammter)
 
     def POST(self):

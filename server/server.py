@@ -17,6 +17,7 @@ from dom.graph.put import put as put_graph
 from dom.graph.delete import delete as delete_graph
 from dom.push.post import post as post_push
 from dom.push.put import put as put_push
+from dom.curUser.get import get as curUser_get
 
 render = web.template.render('gephi/', cache=False)
 
@@ -27,6 +28,7 @@ urls = [
     '/users', 'users',
     '/graphs', 'graphs',
     '/pushes', 'pushes',
+    '/curUser', 'curUser',
 ]
 
 app = web.application(urls, globals())
@@ -126,17 +128,27 @@ class tags:
         web.header('Content-Type', 'application/json')
         return es.get_tags_json(web.input().type, web.input().term)
 
+
+class curUser:
+
+    def GET(self):
+        web.header('Access-Control-Allow-Origin','*')
+        web.header('Access-Control-Allow-Credentials','true')
+        web.header('Content-Type', 'application/json')
+        user = web.input().get("user", None)
+        name = web.input().get("name", None)
+        d = curUser_get(user, name)
+        return json.dumps(d, default=_jsonforammter)
+
+
 class users:
 
     def GET(self):
         web.header('Access-Control-Allow-Origin','*')
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/json')
-        defUser = web.input().get("user", None)
-        user_name = _getUser(web.input())
-        d = user_get(user_name)
-        if not defUser:
-            d["name"] = None
+        user = web.input()["user"]
+        d = user_get(user)
         return json.dumps(d, default=_jsonforammter)
 
 class contribs:

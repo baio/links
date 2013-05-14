@@ -25,6 +25,8 @@ def get(user_name, graph_id):
             user = db.users.find_one({"_id": user_name})
             user_graph = filter(lambda x: x["ref"] == graph_id, user["graphs"])[0]
     else:
+        if not user:
+            user = db.users.find_one({"graphs.ref": graph_id})
         user_graph = filter(lambda x: x["ref"] == graph_id, user["graphs"])[0]
     graph_name = user_graph["name"]
     graph_meta = db.graphs.meta.find_one({"_id" : ObjectId(graph_id)})

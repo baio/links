@@ -11,6 +11,7 @@ from dom.contrib.delete import delete as contrib_delete
 from dom.contrib.update import update as contrib_update
 from contrib_patch import contrib_patch
 from dom.graph.get import get as get_graph
+from dom.graph.get_data import get as get_graph_data
 from dom.graph.patch import patch as patch_graph
 from dom.graph.post import post as post_graph
 from dom.graph.put import put as put_graph
@@ -73,7 +74,11 @@ class graphs:
         input = web.input()
         graph_ref = input.get("graph", None)
         user_name = input.get("user", None)
-        d = get_graph(user_name, graph_ref)
+        context = input.get("context", None)
+        if context is None:
+            d = get_graph(user_name, graph_ref)
+        elif context == "data":
+            d = get_graph_data(user_name, graph_ref)
         return json.dumps(d, default=_jsonforammter)
 
     def PATCH(self):
@@ -165,7 +170,7 @@ class contribs:
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/json')
         data = json.loads(web.data())
-        d = contrib_create(data["user"], data["name"], data["url"])
+        d = contrib_create(data["user"], data["name"], data["url"], data.get("graph_ref", None))
         return json.dumps(d, default=_jsonforammter)
 
     def OPTIONS(self):

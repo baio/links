@@ -11,6 +11,7 @@ def _get_default_graph():
     return "twitter@baio1980", "518b989739ed9714289d0bc1"
 
 def get(user_name, graph_id):
+    orig_user_id = user_name
     if not user_name and not graph_id:
         user_name, graph_id = _get_default_graph()
     client = mongo.MongoClient(config["MONGO_URI"])
@@ -28,6 +29,7 @@ def get(user_name, graph_id):
         if not user:
             user = db.users.find_one({"graphs.ref": graph_id})
         user_graph = filter(lambda x: x["ref"] == graph_id, user["graphs"])[0]
+    is_yours = user["_id"] == orig_user_id
     graph_name = user_graph["name"]
     graph_meta = db.graphs.meta.find_one({"_id" : ObjectId(graph_id)})
     nodes_meta = graph_meta["nodes"] if graph_meta else None
@@ -36,7 +38,7 @@ def get(user_name, graph_id):
     for contrib_id in user_graph["contribs"]:
         contrib = db.contribs.find_one({"_id" : ObjectId(contrib_id)})
         contrib_url =  filter(lambda x: x["ref"] == contrib_id, user["contribs"])[0]["url"]
-        items = contrib["items"]
+        items = contrib["items"] if ("items" in contrib) else []
         def map_node(node_name):
             pos = [-1, -1]
             if nodes_meta:
@@ -75,7 +77,7 @@ def get(user_name, graph_id):
                 for tag in edge["tags"]: tag["urls"] = [contrib_url]
                 edges[edge_name] = edge
 
-    return {"id": graph_id, "name": graph_name, "nodes": nodes.values(), "edges": edges.values()}
+    return {"id": graph_id, "isYours": is_yours, "name": graph_name, "nodes": nodes.values(), "edges": edges.values()}
 
 def get_contrib(user_name, contrib_id):
     if not contrib_id:

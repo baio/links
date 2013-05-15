@@ -18,7 +18,7 @@ def get(user_name, graph_id):
     db = client[config["MONGO_DB"]]
     user = db.users.find_one({"_id": user_name})
     if user_name and not graph_id:
-        if "graphs" in user and len(user["graphs"]) > 0:
+        if user and "graphs" in user and len(user["graphs"]) > 0:
             user_graph = user["graphs"][0]
             graph_id = user_graph["ref"]
         else:

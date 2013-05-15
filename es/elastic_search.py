@@ -6,9 +6,10 @@ import simplejson as json
 import yaml
 from config.config import config
 
-_elastic_host_url = config["ES_URI"]
+_elastic_host_url = config.get("ES_URI", None)
 
 def _req_hits(q):
+    if not _elastic_host_url: return []
     res = req.get(_elastic_host_url + "/" + q)
     hits = yaml.load(res.content)["hits"]
     return hits["hits"] if len(hits) > 0 else []
@@ -19,6 +20,7 @@ def _req_hits_multi(index_data):
     index : index/type for es request
     data : [requests]
     """
+    if not _elastic_host_url: return []
     index_data = filter(lambda x: len(x[1]) > 0, index_data)
     d = "".join(map(lambda x: u"".join(
                     map(
@@ -46,6 +48,7 @@ def _req(q):
 
 
 def _append(q, name_items_dict):
+    if not _elastic_host_url: return []
     r = []
     for name in name_items_dict:
         res = req.post(_elastic_host_url + "/" + q + name.replace(" ", "_"), data=json.dumps(name_items_dict[name]))
@@ -53,6 +56,7 @@ def _append(q, name_items_dict):
     return r
 
 def _append_multi(index_data):
+    if not _elastic_host_url: return []
     """
     index_data - list of buckets:
     index : index/type for es request

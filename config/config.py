@@ -17,9 +17,9 @@ def _test_config():
 
 def _product_config():
     return {
-        "MONGO_URI" : os.environ['MONGO_URI'],
-        "MONGO_DB" : "knit",
-        "ES_URI" : os.environ['FOUNDELASTICSEARCH_URL']
+        "MONGO_URI": "mongodb://localhost",
+        "MONGO_DB": "knit",
+        "ES_URI": "http://localhost:9200"
     }
 
 config = {

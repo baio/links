@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 __author__ = 'baio'
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import web
 import simplejson as json
 from es import elastic_search as es

@@ -20,6 +20,7 @@ from dom.push.post import post as post_push
 from dom.push.put import put as put_push
 from dom.curUser.get import get as curUser_get
 from dom.contrib.get_all import get as contrib_get_all
+from dom.contrib.copy import copy as contrib_copy
 
 render = web.template.render('gephi/', cache=False)
 
@@ -116,7 +117,7 @@ class graphs:
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/json')
         input = json.loads(web.data())
-        id = delete_graph("baio", input["ref"])
+        id = delete_graph(input["user"], input["ref"])
         return json.dumps({"ok" : True})
 
 class names:
@@ -184,7 +185,7 @@ class contribs:
         web.header('Access-Control-Allow-Origin','*')
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/json')
-        web.header('Access-Control-Allow-Methods', 'POST, GET, PUT, PATCH, DELETE')
+        web.header('Access-Control-Allow-Methods', 'POST, GET, PUT, PATCH, DELETE, COPY')
 
     def PUT(self):
         web.header('Access-Control-Allow-Origin','*')
@@ -210,6 +211,13 @@ class contribs:
         contrib_delete(data["user"], data["ref"])
         return json.dumps({"ok" : True})
 
+    def COPY(self):
+        web.header('Access-Control-Allow-Origin','*')
+        web.header('Access-Control-Allow-Credentials','true')
+        web.header('Content-Type', 'application/json')
+        data = json.loads(web.data())
+        contrib_copy(data["user"], data["ref"])
+        return json.dumps({"ok" : True}, default=_jsonforammter)
 
 if __name__ == "__main__":
     app.run()

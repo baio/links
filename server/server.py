@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 __author__ = 'baio'
+"""
 import os
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+"""
 import web
 import simplejson as json
 from es import elastic_search as es
@@ -222,6 +224,9 @@ class contribs:
         contrib_copy(data["user"], data["ref"])
         return json.dumps({"ok" : True}, default=_jsonforammter)
 
-if __name__ == "__main__":
+def run():
     app.run()
+
+if __name__ == "__main__":
+    run()
 

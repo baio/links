@@ -17,9 +17,9 @@ def _test_config():
 
 def _product_config():
     return {
-        "MONGO_URI": "mongodb://localhost",
-        "MONGO_DB": "knit",
-        "ES_URI": "http://localhost:9200"
+        "MONGO_URI": os.getenv("MONGO_URI", None),
+        "MONGO_DB": os.getenv("MONGO_DB", None),
+        "ES_URI": os.getenv("ES_URI", None)
     }
 
 config = {

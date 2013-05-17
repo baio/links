@@ -20,11 +20,14 @@ def _json2dom(item):
     else:
         dom["_id"] = ObjectId()
     dom["tags"] = []
-    rel = item.get("family_rel", "").strip()
+    rel = item.get("family_rel", None)
+    if rel: rel = rel.strip()
     if rel: dom["tags"].append({"name": rel, "type": "family"})
-    rel = item.get("prof_rel", "").strip()
+    rel = item.get("prof_rel", None)
+    if rel: rel = rel.strip()
     if rel: dom["tags"].append({"name": rel, "type": "prof"})
-    rel = item.get("private_rel", "").strip()
+    rel = item.get("private_rel", None)
+    if rel: rel = rel.strip()
     if rel: dom["tags"].append({"name": rel, "type": "private"})
     return dom
 

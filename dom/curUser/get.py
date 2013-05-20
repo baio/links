@@ -10,7 +10,7 @@ def _get_popular(db):
     refs = _get_popular_refs()
     users = db.users.find({"graphs.ref" : {"$in" : refs}},
                             {"name": 1, "graphs.ref" : 1, "graphs.name" : 1}).limit(5)
-    return map(lambda x: {"name": x["graphs"][0]["name"], "ref": x["graphs"][0]["ref"], "user": x["_id"], "userName": ["name"]}, users)
+    return map(lambda x: {"name": x["graphs"][0]["name"], "ref": x["graphs"][0]["ref"], "user": x["_id"], "userName": x["name"]}, users)
 
 def get(user_id, user_name):
     client = mongo.MongoClient(config["MONGO_URI"])

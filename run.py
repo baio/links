@@ -8,14 +8,16 @@ import os
 import sys
 import time
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from server.server import run
-lines = [x.strip() for x in open(".env")]
 
 print "run server with config"
+lines = [x.strip() for x in open(".env")]
 for line in lines:
     spt=line.split("=")
     print spt
     os.environ[spt[0]] = spt[1]
+
+
+from server.server import run
 
 max_attempts = 3
 for i in xrange(max_attempts):

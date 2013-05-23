@@ -5,7 +5,7 @@ def _dev_config():
     return {
         "MONGO_URI" : "mongodb://adm:123@ds059957.mongolab.com:59957/knit",
         "MONGO_DB" : "knit",
-        "ES_URI" : "http://192.168.0.14:9200"
+        "ES_URI" : os.getenv("ES_URI", None)
     }
 
 def _test_config():

@@ -3,6 +3,25 @@ __author__ = 'baio'
 import pymongo as mongo
 from  bson.objectid import ObjectId
 from config.config import config
+import re
+
+def _wrangling(data):
+    def remove_spaces(value):
+        return re.sub('\s+', ' ', value)
+    clean_ops = [unicode.strip, remove_spaces, unicode.lower]
+    for item in data:
+        for func in clean_ops:
+            item["name_1"] = func(item["name_1"])
+            item["name_2"] = func(item["name_2"])
+            rel = item.get("family_rel", "")
+            if rel:
+                item["family_rel"] = func(rel)
+            rel = item.get("prof_rel", "")
+            if rel:
+                item["prof_rel"] = func(rel)
+            rel = item.get("private_rel", "")
+            if rel:
+                item["private_rel"] = func(rel)
 
 def _validate(data):
     #names not empty
@@ -32,6 +51,7 @@ def _json2dom(item):
     return dom
 
 def patch(user_name, contrib_id, data):
+    _wrangling(data)
     _validate(data)
     """append/modify/delete items in contrib"""
     client = mongo.MongoClient(config["MONGO_URI"])

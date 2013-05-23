@@ -9,7 +9,7 @@ def get(user_name, contrib_ref):
     user = db.users.find_one({"contribs.ref": contrib_ref}, {"contribs.$.ref" : 1})
     contrib_ref = db.contribs.find_one({"_id" : ObjectId(contrib_ref)})
     contrib = user["contribs"][0]
-    contrib["items"] = contrib_ref.get("items", [])
+    contrib["items"] = contrib_ref.get("items", [])[::-1]
     for item in contrib["items"]:
         item["_id"] = str(item["_id"])
         for tag in item["tags"]:

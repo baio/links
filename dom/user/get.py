@@ -9,5 +9,5 @@ def get(user_id):
     for graph in user["graphs"]:
         contribs = list(graph["contribs"])
         graph["contribs"] = [filter(lambda x: x["ref"] == contrib, user["contribs"])[0] for contrib in contribs]
-        
+
     return user

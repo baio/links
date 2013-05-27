@@ -10,9 +10,10 @@ def delete(user_name, contrib_id):
     client = mongo.MongoClient(config["MONGO_URI"])
     db = client[config["MONGO_DB"]]
 
+    graphs = get_graphs(db, user_name, contrib_id)
     db.users.update({"_id": user_name}, {"$pull" : {"contribs" : {"ref" : contrib_id}} })
     db.users.update({"_id": user_name, "graphs.contribs" : contrib_id}, {"$pull" : {"graphs.$.contribs" : contrib_id} })
     db.contribs.remove({"_id" : ObjectId(contrib_id)})
 
-    return get_graphs(user_name, contrib_id)
+    return graphs
 

@@ -26,6 +26,7 @@ from dom.push.put import put as put_push
 from dom.curUser.get import get as curUser_get
 from dom.contrib.get_all import get as contrib_get_all
 from dom.contrib.copy import copy as contrib_copy
+from dom.contrib.get_graphs import get_graphs as get_contrib_graphs
 
 render = web.template.render('gephi/', cache=False)
 
@@ -37,6 +38,7 @@ urls = [
     '/graphs', 'graphs',
     '/pushes', 'pushes',
     '/curUser', 'curUser',
+    '/contrib_graphs', 'contrib_graphs'
 ]
 
 app = web.application(urls, globals())
@@ -47,6 +49,15 @@ def _getUser(input):
 
 def _jsonforammter(obj):
     return obj.isoformat() if hasattr(obj, 'isoformat') else obj
+
+class contrib_graphs:
+
+    def GET(self):
+        web.header('Access-Control-Allow-Origin','*')
+        web.header('Access-Control-Allow-Credentials','true')
+        web.header('Content-Type', 'application/json')
+        input = web.input()
+        return json.dumps(get_contrib_graphs(input["user"], input["ref"]))
 
 class pushes:
 

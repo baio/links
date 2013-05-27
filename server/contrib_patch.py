@@ -3,7 +3,8 @@ from dom.contrib.patch import patch
 from es.elastic_search import append_names_tags
 
 def contrib_patch(user_name, contrib_id, items):
-    res = patch(user_name, contrib_id, items)
+    res_patch = patch(user_name, contrib_id, items)
+    res = res_patch["data"]
     _items = []
     for i, item in enumerate(items):
         if len(res[i]["err"]) == 0 and item["_isRemoved"] == False:
@@ -22,6 +23,6 @@ def contrib_patch(user_name, contrib_id, items):
     #TODO append only unique items
     if len(names) > 0 and len(tags) > 0:
         append_names_tags(names, tags)
-    return res
+    return res_patch
 
 

@@ -37,8 +37,7 @@ urls = [
     '/users', 'users',
     '/graphs', 'graphs',
     '/pushes', 'pushes',
-    '/curUser', 'curUser',
-    '/contrib_graphs', 'contrib_graphs'
+    '/curUser', 'curUser'
 ]
 
 app = web.application(urls, globals())
@@ -50,14 +49,6 @@ def _getUser(input):
 def _jsonforammter(obj):
     return obj.isoformat() if hasattr(obj, 'isoformat') else obj
 
-class contrib_graphs:
-
-    def GET(self):
-        web.header('Access-Control-Allow-Origin','*')
-        web.header('Access-Control-Allow-Credentials','true')
-        web.header('Content-Type', 'application/json')
-        input = web.input()
-        return json.dumps(get_contrib_graphs(input["user"], input["ref"]))
 
 class pushes:
 
@@ -224,8 +215,8 @@ class contribs:
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/json')
         data = json.loads(web.data())
-        contrib_delete(data["user"], data["ref"])
-        return json.dumps({"ok" : True})
+        res = contrib_delete(data["user"], data["ref"])
+        return json.dumps(res)
 
     def COPY(self):
         web.header('Access-Control-Allow-Origin','*')

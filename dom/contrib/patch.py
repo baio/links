@@ -3,6 +3,7 @@ __author__ = 'baio'
 import pymongo as mongo
 from  bson.objectid import ObjectId
 from config.config import config
+from dom.contrib.get_graphs import get_graphs
 import re
 
 def _wrangling(data):
@@ -89,5 +90,7 @@ def patch(user_name, contrib_id, data):
     if len(rm_ids) > 0:
         db.contribs.update({"_id" : contrib_ref},
                             {"$pull": {"items" : {"_id" : {"$in" : rm_ids}}}})
+
+    res = {"data": res, "graphs": get_graphs(db, user_name, contrib_id)}
 
     return res

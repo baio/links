@@ -58,8 +58,6 @@ def get(user_name, graph_id):
                 node_name_1 = node_name_2
                 node_name_2 = s
             edge_name = node_name_1 + " " + node_name_2
-            if edge_name == u'татьяна голикова виктор христенко':
-               pass
             if  edge_name in edges:
                 edge = edges[edge_name]
                 for item_tag in item["tags"]:
@@ -77,7 +75,7 @@ def get(user_name, graph_id):
                 for tag in edge["tags"]: tag["urls"] = [contrib_url]
                 edges[edge_name] = edge
 
-    return {"id": graph_id, "isYours": is_yours, "name": graph_name, "nodes": nodes.values(), "edges": edges.values()}
+    return {"id": graph_id, "isYours": is_yours, "owner" : user["_id"], "name": graph_name, "nodes": nodes.values(), "edges": edges.values()}
 
 def get_contrib(user_name, contrib_id):
     if not contrib_id:

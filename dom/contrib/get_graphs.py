@@ -8,6 +8,9 @@ def get_graphs(db, user_name, contrib_id):
         client = mongo.MongoClient(config["MONGO_URI"])
         db = client[config["MONGO_DB"]]
     user = db.users.find_one({"_id": user_name, "graphs.contribs": contrib_id}, {"graphs.ref" : 1})
-    res = map(lambda x: x["ref"], user["graphs"])
-    return res
+    if user:
+        res = map(lambda x: x["ref"], user["graphs"])
+        return res
+    else:
+        return []
 

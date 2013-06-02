@@ -7,7 +7,8 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 """
 import web
 import simplejson as json
-from es import elastic_search as es
+#from es import elastic_search as es
+from es import elastic_search_v2 as es
 
 from dom.user.get import get as user_get
 from dom.contrib.create import create as contrib_create
@@ -133,14 +134,21 @@ class names:
         web.header('Access-Control-Allow-Origin','*')
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/json')
-        return es.get_names_json(web.input().term)
+        res = es.get("gov-ru[name]", "name", web.input().term)
+        def map_name(i):
+            r = " ".join(i[0].split(" ")[::-1])
+            return {"key": r, "val": r, "label": i[0]}
+        return json.dumps(map(map_name, res))
 
 class tags:
     def GET(self):
         web.header('Access-Control-Allow-Origin','*')
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/json')
-        return es.get_tags_json(web.input().type, web.input().term)
+        def map_tag(i):
+            return {"key": i[1], "val": i[1], "label": i[1]}
+        res = es.get("gov-ru[person-rel]", "person-rel", web.input().term, {"match": {"type": web.input().type + "_rel"} })
+        return json.dumps(map(map_tag, res))
 
 
 class curUser:

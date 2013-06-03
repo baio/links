@@ -28,6 +28,7 @@ from dom.curUser.get import get as curUser_get
 from dom.contrib.get_all import get as contrib_get_all
 from dom.contrib.copy import copy as contrib_copy
 from dom.contrib.get_graphs import get_graphs as get_contrib_graphs
+from  bson.objectid import ObjectId
 
 render = web.template.render('gephi/', cache=False)
 
@@ -38,7 +39,8 @@ urls = [
     '/users', 'users',
     '/graphs', 'graphs',
     '/pushes', 'pushes',
-    '/curUser', 'curUser'
+    '/curUser', 'curUser',
+    '/index', 'index'
 ]
 
 app = web.application(urls, globals())
@@ -48,8 +50,8 @@ def _getUser(input):
     return user_name if user_name else "twitter@baio1980"
 
 def _jsonforammter(obj):
+    if type(obj) == ObjectId: return obj
     return obj.isoformat() if hasattr(obj, 'isoformat') else obj
-
 
 class pushes:
 
@@ -127,6 +129,17 @@ class graphs:
         input = json.loads(web.data())
         id = delete_graph(input["user"], input["ref"])
         return json.dumps({"ok" : True})
+
+
+class index:
+
+    def GET(self):
+        input = web.input().term
+        res = es.get(input.index, input.type, input.term)
+        def map_name(i):
+            r = i[0]
+            return {"key": r, "val": r, "label": r}
+        return json.dumps(map(map_name, res))
 
 class names:
 

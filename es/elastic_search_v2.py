@@ -27,16 +27,25 @@ def mset(index, type, l, val_field_name = "val"):
     content = yaml.load(res.content)
     return map(lambda x: x["index"]["ok"] if "index" in x else x["create"]["_id"], content["items"])
 
+"""
+l - list of buckets
+(index, type, id, val)
+"""
+def bset(l):
+    if not _elastic_host_url or len(l) == 0: return []
+    def data2idx(i):
+        return u"{}\n{}\n".format(
+            json.dumps({"index" : {"_index" : i[0], "_type" : i[1], "_id" : i[2]}}),
+            json.dumps(i[3]))
+
+    d = "".join(map(data2idx, l))
+    print d
+    res = req.post(_elastic_host_url + "/_bulk", data=d)
+    content = yaml.load(res.content)
+    return map(lambda x: x["index"]["ok"] if "index" in x else x["create"]["_id"], content["items"])
+
 def get(index, type, val, ex_filter = None, val_field_name = "val", search_val_field_name = "val.autocomplete"):
     if not _elastic_host_url: return []
-    """
-    d = { "query" : {
-            "fuzzy" : {
-                search_val_field_name : val
-            }
-        }
-    }
-    """
     d = {"query": {
         "bool": {
             "must": {

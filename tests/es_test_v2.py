@@ -8,20 +8,21 @@ class TestContribElastic_v2(unittest.TestCase):
 
     def test_mset(self):
         return
-        names = [(u"max pain", "max pain"), ("mikkey mauase", "mikkey mause"), ("hommer simpson", "hommer simpson")]
-        es.mset("gov-ru[name]", "name", names)
+        names = [(u"васильева евгения", u"васильева евгения"), (u"васильев николай", u"васильев николай")]
+        es.mset("person-names.ru", "politic-rus", names)
 
     def test_mset_tag(self):
         return
-        rels = [("test_sick", {"val": "test", "type": "sick"})]
-        es.mset("gov-ru[person-rel]", "person-rel", rels, None)
+        rels = [("друг", "друг")]
+        es.mset("relations.ru", "pp-private", rels)
 
     def test_get(self):
-        res = es.get("gov-ru[name]", "name", "mix")
+        return
+        res = es.get("person-names.ru", "politic-rus", u"васел")
         print res
 
     def test_get_tag(self):
-        res = es.get("gov-ru[person-rel]", "person-rel", "tezt", {"match" : {"type" : "sick"}})
+        res = es.get("relations.ru", "pp-private", u"дри")
         print res
 
 if __name__ == '__main__':

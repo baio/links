@@ -134,10 +134,10 @@ class names:
         web.header('Access-Control-Allow-Origin','*')
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/json')
-        res = es.get("gov-ru[name]", "name", web.input().term)
+        res = es.get("person-names.ru", "politic-rus", web.input().term)
         def map_name(i):
-            r = " ".join(i[0].split(" ")[::-1])
-            return {"key": r, "val": r, "label": i[0]}
+            r = i[0]
+            return {"key": r, "val": r, "label": r}
         return json.dumps(map(map_name, res))
 
 class tags:
@@ -146,8 +146,9 @@ class tags:
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/json')
         def map_tag(i):
-            return {"key": i[1], "val": i[1], "label": i[1]}
-        res = es.get("gov-ru[person-rel]", "person-rel", web.input().term, {"match": {"type": web.input().type + "_rel"} })
+            r = i[1]
+            return {"key": r, "val": r, "label": r}
+        res = es.get("relations.ru", web.input().type, web.input().term)
         return json.dumps(map(map_tag, res))
 
 

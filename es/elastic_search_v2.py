@@ -60,4 +60,4 @@ def get(index, type, val, ex_filter = None, val_field_name = "val", search_val_f
     res = req.post(_elastic_host_url + "/" + index + "/" + type + "/_search", data=json.dumps(d))
     hits = yaml.load(res.content)["hits"]
     hits = hits["hits"] if len(hits) > 0 else []
-    return map(lambda x: (x["_id"], x["_source"][val_field_name]), hits)
+    return map(lambda x: (x["_id"], x["_source"][val_field_name], x["_index"], x["_type"]), hits)

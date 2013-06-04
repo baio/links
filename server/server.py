@@ -134,11 +134,11 @@ class graphs:
 class index:
 
     def GET(self):
-        input = web.input().term
+        input = web.input()
         res = es.get(input.index, input.type, input.term)
         def map_name(i):
             r = i[0]
-            return {"key": r, "val": r, "label": r}
+            return {"key": r, "val": r, "label": r, "type": i[3]}
         return json.dumps(map(map_name, res))
 
 class names:

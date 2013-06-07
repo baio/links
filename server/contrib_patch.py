@@ -15,7 +15,7 @@ def contrib_patch(user_name, contrib_id, items):
             _items.append(item)
 
     def map_field(field_val, scheme):
-        if type(field_val) is list:
+        if isinstance(field_val, list):
             for v in field_val:
                 yield map_field(v, scheme)
         else:
@@ -26,7 +26,8 @@ def contrib_patch(user_name, contrib_id, items):
     scheme = get_scheme(user_name, contrib_id)
     for key in scheme:
         field_scheme = scheme[key]
-        field = utils_array.unique(sum(map(lambda i: map_field(i[key], field_scheme), items), []), lambda x: x[0])
+        field = utils_array.unique(
+            sum(map(lambda i: list(map_field(i[key], field_scheme)), items), []), lambda x: x[0])
         es.bset(field)
 
     return res_patch

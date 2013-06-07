@@ -34,11 +34,17 @@ def _validate(data):
     return [{"errs": [], "warns": []}] * len(data)
 
 def _json2dom(item):
-    dom = {"name_1": item["name_1"], "name_2": item["name_2"]}
+    dom = {"object": item["name_1"], "subject": item["name_2"]}
     if item["_id"] is not None:
         dom["_id"] = ObjectId(item["_id"])
     else:
         dom["_id"] = ObjectId()
+    dom["url"] = item["url"]
+    dom["source"] = item["source"]
+    dom["date"] = item["date"]
+    dom["dateTo"] = item["dateTo"]
+    dom["predicates"] = item["relations"]
+    """
     dom["tags"] = []
     rel = item.get("family_rel", None)
     if rel: rel = rel.strip()
@@ -49,6 +55,7 @@ def _json2dom(item):
     rel = item.get("private_rel", None)
     if rel: rel = rel.strip()
     if rel: dom["tags"].append({"name": rel, "type": "private"})
+    """
     return dom
 
 def patch(user_name, contrib_id, data):
@@ -78,17 +85,17 @@ def patch(user_name, contrib_id, data):
         rm_ids.append(ObjectId(item["_id"]))
 
     if len(crt_items) > 0:
-        db.contribs.update({"_id": contrib_ref}, {"$pushAll" : {"items" : crt_items}})
+        db.contribs_v2.update({"_id": contrib_ref}, {"$pushAll" : {"items" : crt_items}})
 
     if len(upd_items) > 0:
         for upd_item in upd_items:
-            db.contribs.update({"_id": contrib_ref, "items._id": upd_item["_id"]}, {"$set": {"items.$" : upd_item}})
+            db.contribs_v2.update({"_id": contrib_ref, "items._id": upd_item["_id"]}, {"$set": {"items.$" : upd_item}})
 
         #Waiting for the miracle to come, https://jira.mongodb.org/browse/SERVER-831
         #cnt = db.user.find({"_id": user_name, "contribs.name": contrib_name}, {"contribs.$.data": {"$elemMatch": {"_id" : "name_1_name_3"}}})
 
     if len(rm_ids) > 0:
-        db.contribs.update({"_id" : contrib_ref},
+        db.contribs_v2.update({"_id" : contrib_ref},
                             {"$pull": {"items" : {"_id" : {"$in" : rm_ids}}}})
 
     res = {"data": res, "graphs": get_graphs(db, user_name, contrib_id)}

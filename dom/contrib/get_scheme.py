@@ -1,11 +1,8 @@
 __author__ = 'baio'
-import pymongo as mongo
-from config.config import config
-
+from dom.connection import get_db
 
 def get_scheme(user_name, contrib_id):
-    client = mongo.MongoClient(config["MONGO_URI"])
-    db = client[config["MONGO_DB"]]
+    db = get_db()
     user = db.users.find_one({"_id": user_name, "contribs.ref": contrib_id}, {"contribs.$.scheme_ref" : 1})
     if user:
         res = db.contribs.scheme.find_one({"_id": user["contribs"][0]["scheme_ref"]})

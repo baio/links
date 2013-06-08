@@ -43,6 +43,7 @@ def _json2dom(item):
     dom["date"] = item["date"]
     dom["dateTo"] = item["dateTo"]
     dom["predicates"] = item["relations"]
+    dom["scheme"] = item["scheme"]
     return dom
 
 def patch(user_name, contrib_id, data):

@@ -12,7 +12,7 @@ from es import elastic_search_v2 as es
 
 from dom.user.get import get as user_get
 from dom.contrib.create import create as contrib_create
-from dom.contrib.get import get as contrib_get
+from dom.contrib.get_v2 import get as contrib_get
 from dom.contrib.delete import delete as contrib_delete
 from dom.contrib.update import update as contrib_update
 from contrib_patch import contrib_patch

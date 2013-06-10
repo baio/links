@@ -8,7 +8,7 @@ def contrib_patch(user_name, contrib_id, items):
     _items = []
 
     for i, item in enumerate(items):
-        if len(res[i]["err"]) == 0 and item["_isRemoved"] == False:
+        if len(res[i]["err"]) == 0 and ("_isRemoved" not in item or item["_isRemoved"] == False):
             _items.append(item)
 
     update_index_via_scheme(items)

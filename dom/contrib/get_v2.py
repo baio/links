@@ -11,11 +11,28 @@ def get(user_name, contrib_ref):
     contrib["items"] = contrib_ref.get("items", [])[::-1]
     if "schemes" in contrib:
         contrib["schemes"] = list(db.contribs.scheme.find({"_id": { "$in" : contrib["schemes"]}}))
+    """
     for item in contrib["items"]:
         item["_id"] = str(item["_id"])
         item["name_1"] = item["object"]
         item["name_2"] = item["subject"]
         item["relations"] = item["predicates"]
+    """
+    items = []
+    for i in contrib["items"]:
+        item = {
+            "_id": str(i["_id"]),
+            "name_1": i["object"],
+            "name_2": i["subject"],
+            "scheme": i["scheme"],
+            "relations": i["predicates"],
+            "url": i["url"],
+            "date": i.get("date", None),
+            "dateTo": i.get("dateTo", None),
+            "source": i.get("source", None)
+            }
+        items.append(item)
+    contrib["items"] = items
     return contrib
 
 

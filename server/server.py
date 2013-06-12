@@ -16,7 +16,7 @@ from dom.contrib.get_v2 import get as contrib_get
 from dom.contrib.delete import delete as contrib_delete
 from dom.contrib.update import update as contrib_update
 from contrib_patch import contrib_patch
-from dom.graph.get import get as get_graph
+from dom.graph.get_v2 import get as get_graph
 from dom.graph.get_data import get as get_graph_data
 from dom.graph.patch import patch as patch_graph
 from dom.graph.post import post as post_graph

@@ -207,7 +207,7 @@ class contribs:
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/json')
         data = json.loads(web.data())
-        d = contrib_create(data["user"], data["name"], data["url"], data.get("graph_ref", None))
+        d = contrib_create(data["user"], data["name"], data.get("graph_ref", None))
         return json.dumps(d, default=_jsonforammter)
 
     def OPTIONS(self):

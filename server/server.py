@@ -221,7 +221,7 @@ class contribs:
         web.header('Access-Control-Allow-Credentials','true')
         web.header('Content-Type', 'application/json')
         data = json.loads(web.data())
-        d = contrib_update(data["user"], data["ref"], data["name"], data["url"])
+        d = contrib_update(data["user"], data["ref"], data["name"])
         return json.dumps(d, default=_jsonforammter)
 
     def PATCH(self):

@@ -12,7 +12,8 @@ def create(user_name, contrib_name, graph_ref):
     now = dt.datetime.now()
 
     ref = db.contribs_v2.insert({})
-    contrib = {"name": contrib_name, "date": now, "ref": str(ref)}
+    schemes = ["person-person.ru", "person-org.ru", "org-org.ru"]
+    contrib = {"name": contrib_name, "date": now, "ref": str(ref), "schemes" : schemes}
     db.users.update({"_id": user_name}, {"$push" : { "contribs" :  contrib}})
     if graph_ref:
         db.users.update({"_id": user_name, "graphs.ref": graph_ref}, {"$push" : { "graphs.$.contribs" :  str(ref)}})

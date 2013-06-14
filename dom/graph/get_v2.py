@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 __author__ = 'baio'
 
-import pymongo as mongo
-from config.config import config
+#import pymongo as mongo
+#from config.config import config
+from dom.connection import get_db
 from  bson.objectid import ObjectId
 
 def _get_default_contrib_id():
@@ -14,8 +15,7 @@ def get(user_name, graph_id):
     orig_user_id = user_name
     if not user_name and not graph_id:
         user_name, graph_id = _get_default_graph()
-    client = mongo.MongoClient(config["MONGO_URI"])
-    db = client[config["MONGO_DB"]]
+    db = get_db()
     user = db.users.find_one({"_id": user_name})
     if user_name and not graph_id:
         if user and "graphs" in user and len(user["graphs"]) > 0:

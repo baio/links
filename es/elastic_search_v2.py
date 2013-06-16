@@ -8,6 +8,8 @@ import os
 
 _elastic_host_url = os.getenv("ES_URI", None)
 
+print _elastic_host_url
+
 """
 index - set type
 type - field type

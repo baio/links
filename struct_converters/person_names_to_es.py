@@ -18,7 +18,7 @@ def convert():
     tags = []
     for c in user["contribs"]:
         contrib = db.contribs_v2.find_one({"_id": ObjectId(c["ref"])})
-        if contrib:
+        if contrib and "items" in contrib:
             for i in contrib["items"]:
                 n = " ".join(i["object"].split(" ")[::-1])
                 names.append(n)

@@ -20,9 +20,9 @@ def convert():
         contrib = db.contribs_v2.find_one({"_id": ObjectId(c["ref"])})
         if contrib and "items" in contrib:
             for i in contrib["items"]:
-                n = " ".join(i["object"].split(" ")[::-1])
+                n = i["object"]
                 names.append(n)
-                n = " ".join(i["subject"].split(" ")[::-1])
+                n = i["subject"]
                 names.append(n)
                 tags += i["predicates"]
     names = map(lambda x: (x, x), set(names))

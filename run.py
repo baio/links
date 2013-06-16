@@ -19,10 +19,11 @@ for line in lines:
 
 from server.server import run
 
+
 max_attempts = 3
 for i in xrange(max_attempts):
     try:
-        run()
+        run()	
     except:
         time.sleep(10)
 

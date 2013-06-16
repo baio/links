@@ -16,12 +16,13 @@ def convert():
     tags = []
     for c in user["contribs"]:
         contrib = db.contribs_v2.find_one({"_id": ObjectId(c["ref"])})
-        for i in contrib["items"]:
-            n = " ".join(i["object"].split(" ")[::-1])
-            names.append(n)
-            n = " ".join(i["subject"].split(" ")[::-1])
-            names.append(n)
-            tags += i["predicates"]
+        if contrib:
+            for i in contrib["items"]:
+                n = " ".join(i["object"].split(" ")[::-1])
+                names.append(n)
+                n = " ".join(i["subject"].split(" ")[::-1])
+                names.append(n)
+                tags += i["predicates"]
     names = map(lambda x: (x, x), set(names))
     tags = unique(tags, lambda x: x["type"] + "_" + x["val"])
     tags = map(lambda x: ("relations.ru", x["type"], x["val"], {"val": x["val"]}), tags)

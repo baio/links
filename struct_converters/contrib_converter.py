@@ -16,23 +16,24 @@ def convert():
     for c in user["contribs"]:
         old_contrib = db.contribs.find_one({"_id": ObjectId(c["ref"])})
         new_contrib = {"_id": ObjectId(c["ref"]), "items": []}
-        for i in old_contrib["items"]:
-            item = {
-                "_id": i["_id"],
-                "scheme": "person-person.ru",
-                "object": i["name_1"],
-                "subject": i["name_2"],
-                "url": c["url"],
-                "predicates": []
-            }
-            for t in i["tags"]:
-                predicate = {
-                    "type": "pp-" + t["type"],
-                    "val": t["name"]
+        if old_contrib:
+            for i in old_contrib["items"]:
+                item = {
+                    "_id": i["_id"],
+                    "scheme": "person-person.ru",
+                    "object": " ".join(i["name_1"].split(" ")[::-1]),
+                    "subject": " ".join(i["name_2"].split(" ")[::-1]),
+                    "url": c["url"],
+                    "predicates": []
                 }
-                item["predicates"].append(predicate)
-            new_contrib["items"].append(item)
-        db.contribs_v2.save(new_contrib)
+                for t in i["tags"]:
+                    predicate = {
+                        "type": "pp-" + t["type"],
+                        "val": t["name"]
+                    }
+                    item["predicates"].append(predicate)
+                new_contrib["items"].append(item)
+            db.contribs_v2.save(new_contrib)
         c["schemes"] = ["person-person.ru", "person-org.ru", "org-org.ru"]
     db.users.save(user)
 

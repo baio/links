@@ -17,6 +17,7 @@ from dom.contrib.delete import delete as contrib_delete
 from dom.contrib.update import update as contrib_update
 from contrib_patch import contrib_patch
 from dom.graph.get_v2 import get as get_graph
+from dom.graph.get_shortest_path import get_shortest_path
 from dom.graph.get_data import get as get_graph_data
 from dom.graph.patch import patch as patch_graph
 from dom.graph.post import post as post_graph
@@ -88,7 +89,8 @@ class graphs:
         user_name = input.get("user", None)
         context = input.get("context", None)
         if context is None:
-            d = get_graph(user_name, graph_ref)
+            #d = get_graph(user_name, graph_ref)
+            d = get_shortest_path(user_name, graph_ref)
         elif context == "data":
             d = get_graph_data(user_name, graph_ref)
         return json.dumps(d, default=_jsonforammter)

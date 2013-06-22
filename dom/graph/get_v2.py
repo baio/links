@@ -53,12 +53,6 @@ def get(user_name, graph_id):
             node_name_2 = node_name = item["subject"]
             if node_name not in nodes:
                 nodes[node_name] = map_node(node_name)
-            """
-            if node_name_1 < node_name_2:
-                s = node_name_1
-                node_name_1 = node_name_2
-                node_name_2 = s
-            """
             edge_name = node_name_1 + " " + node_name_2
             if  edge_name in edges:
                 edge = edges[edge_name]

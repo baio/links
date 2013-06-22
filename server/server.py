@@ -88,9 +88,13 @@ class graphs:
         graph_ref = input.get("graph", None)
         user_name = input.get("user", None)
         context = input.get("context", None)
+        frm = input.get("from", None)
+        to = input.get("to", None)
         if context is None:
-            #d = get_graph(user_name, graph_ref)
-            d = get_shortest_path(user_name, graph_ref)
+            if frm is None:
+                d = get_graph(user_name, graph_ref)
+            else:
+                d = get_shortest_path(frm, to)
         elif context == "data":
             d = get_graph_data(user_name, graph_ref)
         return json.dumps(d, default=_jsonforammter)

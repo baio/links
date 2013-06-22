@@ -7,13 +7,17 @@ from  bson.objectid import ObjectId
 from py2neo import neo4j, cypher
 
 def get_shortest_path(name_1, name_2):
-    name_1 = "володин валерий"
-    name_2 = "карманов александр"
+    name_1 = name_1.encode("utf8")
+    name_2 = name_2.encode("utf8")
+    #name_1 = "володин валерий"
+    #name_2 = "карманов александр"
     db = get_db()
     graph_db = neo4j.GraphDatabaseService(os.getenv("NEO4J_URI"))
     query = "START n=node:person(name=\"{}\"), m=node:person(name=\"{}\") MATCH p = shortestPath(n-[*]-m) RETURN p;"\
         .format(name_1, name_2)
     data, metadata = cypher.execute(graph_db, query)
+    if len(data) == 0:
+        return {"id": None, "isYours": False, "owner" : None, "name": "{}-{}".format(name_1, name_2), "nodes": [], "edges": []}
     refs = map(lambda x: x.get_properties()["refs"], data[0][0].relationships)
     plain_refs = sum(refs, [])
     plain_refs = map(lambda x: ObjectId(x), plain_refs)

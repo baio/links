@@ -18,6 +18,7 @@ from dom.contrib.update import update as contrib_update
 from contrib_patch import contrib_patch
 from dom.graph.get_v2 import get as get_graph
 from dom.graph.get_shortest_path import get_shortest_path
+from dom.graph.get_linked_nodes import get_linked_nodes
 from dom.graph.get_data import get as get_graph_data
 from dom.graph.patch import patch as patch_graph
 from dom.graph.post import post as post_graph
@@ -90,11 +91,14 @@ class graphs:
         context = input.get("context", None)
         frm = input.get("from", None)
         to = input.get("to", None)
+        src = input.get("src", None)
         if context is None:
-            if frm is None:
-                d = get_graph(user_name, graph_ref)
-            else:
+            if frm is not None:
                 d = get_shortest_path(frm, to)
+            elif src is not None:
+                d = get_linked_nodes(src)
+            else:
+                d = get_graph(user_name, graph_ref)
         elif context == "data":
             d = get_graph_data(user_name, graph_ref)
         return json.dumps(d, default=_jsonforammter)

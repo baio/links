@@ -1,6 +1,7 @@
 __author__ = 'baio'
 import os
 
+"""
 def _dev_config():
     return {
         "MONGO_URI" : "mongodb://adm:123@ds059957.mongolab.com:59957/knit",
@@ -27,4 +28,10 @@ config = {
         "test": _test_config,
         "production": _product_config
     }[os.getenv("ENV", "dev")]()
+"""
 
+config = {
+    "MONGO_URI" : os.getenv("MONGO_URI", None), #"mongodb://adm:123@ds059957.mongolab.com:59957/knit",
+    "MONGO_DB" : os.getenv("MONGO_DB", None),
+    "ES_URI" : os.getenv("ES_URI", None)
+}
